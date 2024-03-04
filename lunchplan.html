@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Lunch Plan</title>
+    <link rel="stylesheet" href="./lunchplan.css">
+  </head>
+  <body>
+    <!-- <svg width = "100" height= "30" class= "inline">
+      <rect width="100" height="60" x="40" y="20" fill = "red"/>
+    </svg> -->
+    <h1>Recommendation</h1>
+    <div id= "card">
+        
+        <h2 class="middle">What kind of meal are you looking for?</h2>
+        <select class="type" name="type">
+          <option value="protein">High Protein</option>
+          <option value="fat">High Fat</option>
+          <option value="carb">High Carb</option>
+          <option value="fiber">High Fiber</option>
+        </select>
+        <h2 class="middle">Indicate Allergies/Dietary Information:</h2>
+        <form id = "checklist">
+          <input type="checkbox" id="vegan" name="vegan" value="Vegan">
+          <label for="vegan"> Vegan</label><br>
+          <input type="checkbox" id="vegetarian" name="vegetarian" value="Vegetarian">
+          <label for="vegetarian"> Vegetarian </label><br>
+          <input type="checkbox" id="glutenfree" name="glutenfree" value="Gluten">
+          <label for="gluten"> Gluten-Free </label><br>
+          <input type="checkbox" id="nut" name="nut" value="Nut">
+          <label for="nut"> Nut Allergy </label><br>
+          <input type="checkbox" id="wheat" name="wheat" value="Wheat">
+          <label for="wheat"> Wheat Allergy </label><br>
+          <input type="checkbox" id="shellfish" name="shellfish" value="Shellfish">
+          <label for="shellfish"> Shellfish Allergy </label><br>
+          <input type="checkbox" id="koser" name="kosher" value="Kosher">
+          <label for="kosher"> Kosher </label><br>
+        </form>
+        <button type="button" id="button">Click to Find Suitable Lunch</button>
+    </div>
+  </body>
+</html>

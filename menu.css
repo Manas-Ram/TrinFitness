@@ -1,0 +1,46 @@
+h1 {
+    text-align: center;
+    font-size: 48px;
+    font-weight: bold;
+}
+
+.subform {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+}
+
+.form label {
+    display: inline-block;
+    font-size: 32px;
+    text-align: right;
+    margin-right: 10px;
+}
+
+.form input {
+    border: 1px solid rgb(95, 171, 219);
+    padding: 10px 15px;
+    display: inline-block;
+    text-align: left;
+    
+}
+
+.menu_calendar {
+    border: 1px solid black;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 10px 10px;
+}
+
+.option_id:nth-child(even), .menu_th:nth-child(even) {
+    background-color: #f1f1f1;
+}
+
+.menu_calendar, .menu_tr, .menu_th, .option_id {
+    padding: 20px 20px;
+    border: 1px solid black;
+    border-collapse: collapse;
+    padding: 40px 40px;
+}

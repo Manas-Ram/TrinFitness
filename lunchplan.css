@@ -1,0 +1,26 @@
+.middle{
+    text-align: center;
+}
+.type {
+    margin-left: 570px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    padding-right: 100px;
+    padding-left: 100px;
+
+}
+#checklist {
+    margin-left: 565px;   
+}
+#button{
+    margin-top: 20px;
+    margin-left: 510px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    padding-right: 120px;
+    padding-left: 110px;
+}
+
+#card {
+    margin-top: 70px;
+}

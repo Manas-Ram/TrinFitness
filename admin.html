@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Dashboard</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px;
+        }
+        .requests {
+            width: 48%;
+            box-shadow: 0 0 5px rgba(0,0,0,0.1);
+            margin-right: 2%;
+        }
+        .request {
+            border-bottom: 1px solid #eee;
+            padding: 10px;
+        }
+        .calendar {
+            display: flex;
+            flex-direction: column;
+            width: 48%;
+            box-shadow: 0 0 5px rgba(0,0,0,0.1);
+            padding: 10px;
+        }
+        .day {
+            margin-bottom: 10px;
+        }
+        .time-slots {
+            display: flex;
+            flex-direction: column;
+        }
+        .time-slot {
+            padding: 5px;
+            border-top: 1px solid #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+
+<div class="requests">
+    <h2>Wellness Center Requests</h2>
+    <div class="request">
+        <p>10:00 AM - Student A</p>
+        <button class="btn accept">Accept</button>
+        <button class="btn deny">Deny</button>
+    </div>
+    <div class="request">
+        <p>11:45 AM - Student B</p>
+        <button class="btn accept">Accept</button>
+        <button class="btn deny">Deny</button>
+    </div>
+    <!-- Add more requests as needed -->
+</div>
+
+<div class="calendar">
+    <h2>Weekly Calendar</h2>
+    <!-- Days of the Week -->
+    <div class="day">
+        <h3>Monday</h3>
+        <div class="time-slot">8:55 - 9:45</div>
+        <div class="time-slot">9:45 - 10:35</div>
+        <div class="time-slot">10:45 - 11:35</div>
+        <div class="time-slot">11:35 - 12:25</div>
+        <div class="time-slot">1:15 - 2:05</div>
+        <div class="time-slot">2:05 - 2:55</div>
+        <div class="time-slot">3:05 - 3:55</div>
+    </div>
+    <!-- Repeat for other weekdays -->
+    <div class="day">
+        <h3>Tuesday</h3>
+        <div class="time-slot">8:55 - 9:45</div>
+        <div class="time-slot">9:45 - 10:35</div>
+        <div class="time-slot">10:45 - 11:35</div>
+        <div class="time-slot">11:35 - 12:25</div>
+        <div class="time-slot">1:15 - 2:05</div>
+        <div class="time-slot">2:05 - 2:55</div>
+        <div class="time-slot">3:05 - 3:55</div>
+    </div>
+    <div class="day">
+        <h3>Wednesday</h3>
+        <!-- Repeat time slots -->
+        <div class="time-slot">8:55 - 9:45</div>
+        <div class="time-slot">9:45 - 10:35</div>
+        <div class="time-slot">10:45 - 11:35</div>
+        <div class="time-slot">11:35 - 12:25</div>
+        <div class="time-slot">1:15 - 2:05</div>
+        <div class="time-slot">1:40 - 2:30</div>
+        <div class="time-slot">2:35 - 3:25</div>
+    </div>
+    <div class="day">
+        <h3>Thursday</h3>
+        <!-- Repeat time slots -->
+        <div class="time-slot">8:55 - 9:45</div>
+        <div class="time-slot">9:45 - 10:35</div>
+        <div class="time-slot">10:45 - 11:35</div>
+        <div class="time-slot">11:35 - 12:25</div>
+        <div class="time-slot">1:15 - 2:05</div>
+        <div class="time-slot">2:05 - 2:55</div>
+        <div class="time-slot">3:05 - 3:55</div>
+    </div>
+    <div class="day">
+        <h3>Friday</h3>
+        <!-- Repeat time slots -->
+        <div class="time-slot">8:55 - 9:45</div>
+        <div class="time-slot">9:45 - 10:35</div>
+        <div class="time-slot">10:45 - 11:35</div>
+        <div class="time-slot">11:35 - 12:25</div>
+        <div class="time-slot">1:15 - 2:05</div>
+        <div class="time-slot">2:05 - 2:55</div>
+        <div class="time-slot">3:05 - 3:55</div>
+    </div>
+</div>
+
+</body>
+</html>

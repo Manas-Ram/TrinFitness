@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Analytics Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px;
+        }
+        .side {
+            width: 48%;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .header {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="side" id="loggedInUser">
+            <div class="header">Logged-in User</div>
+            <p>Name: Manas Ramesh</p>
+            <p>Role: Admin</p>
+        </div>
+
+        <!-- Wellness Center Check Requests Section -->
+        <div class="side" id="wellnessRequests">
+            <div class="header">Wellness Center Check Requests</div>
+            <ul>
+                <li>Thierry Lawrence requested on 2024-03-12</li>
+                <li>Robbie Levine requested on 2024-03-11</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
+

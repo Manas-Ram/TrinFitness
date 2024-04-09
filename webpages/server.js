@@ -28,6 +28,9 @@ let weeklyCalendar = {
     'Tuesday': { '8:55 - 9:45': null, '9:45 - 10:35': null },
 
 };
+app.get('/', (req, res) => {
+    res.render('login', { title: 'Home Page' });
+});
 app.post('/request-slot', (req, res) => {
     const { day, time } = req.body;
     if (weeklyCalendar[day] && weeklyCalendar[day].hasOwnProperty(time)) {
@@ -75,9 +78,14 @@ app.get('/adminstatus', (req, res) => {
 });
 
 app.get('/calendar', (req, res) => {
+    console.log('Rendering calendar with currentWeek:', 'February 26th - March 1st');
     res.render('calendar', {
         currentWeek: 'February 26th - March 1st',
-        weekDays: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
+        weekDays: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+        weeks: [
+            'February 26th - March 1st',
+            'March 4th - March 8th',
+        ]
     });
 });
 

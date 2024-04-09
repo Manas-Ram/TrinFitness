@@ -29,7 +29,7 @@ let weeklyCalendar = {
 
 };
 app.get('/', (req, res) => {
-    res.render('login', { title: 'Home Page' });
+    res.render('login.ejs', {errorMessage: ''});
 });
 app.post('/request-slot', (req, res) => {
     const { day, time } = req.body;

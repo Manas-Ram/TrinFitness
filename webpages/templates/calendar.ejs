@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>My Website</title>
+    <link rel="stylesheet" href="./calendar.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .calendar {
+            width: 100%;
+            max-width: 800px;
+            margin: 20px auto;
+            border-collapse: collapse;
+        }
+        .calendar th, .calendar td {
+            border: 1px solid #ddd;
+            padding-top: 12px;
+            padding-bottom: 12px;
+            padding-right:10px;
+            padding-left: 10px;
+            text-align: center;
+            vertical-align: top;
+        }
+        .calendar th {
+            background-color: rgb(9, 108, 246);
+            color: white;
+        }
+        .time-slot {
+            color: #555;
+        }
+        .request-slot, .accepted-slot, .attending-slot {
+            color: #721c24;
+            text-decoration: line-through;
+        }
+        .accepted-slot {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .attending-slot {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+    </style>    
+</head>
+<body>
+    
+    <div class="dropdown">
+        <button class="dropbtn">Current Week: <%= currentWeek %> </button>
+        <div class="dropdown-content">
+          <% weeks.forEach(function(week) { %>
+            <a href="#"><%= week %></a>
+          <% }); %>
+        </div>
+    </div>
+    <div>
+        <fieldset class="halfbox">
+            <legend>Key:</legend>
+            <button type="button" class="request" disabled>Request</button>
+            <input type="checkbox" id="accepted" name="accepted" checked />
+            <label for="accepted">Teacher Available</label>
+            <svg width="100" height="30" class="inline">
+                <rect width="100" height="60" x="40" y="20" fill="red"/>
+            </svg>
+            <label for="taken">Attending</label>
+        </fieldset>
+    </div>
+    <div>
+        <table class="calendar">
+            <tr>
+                <% weekDays.forEach(function(day) { %>
+                    <th><%= day %></th>
+                <% }); %>
+            </tr>
+            <!-- Assuming slots is a 2D array representing rows and columns -->
+        </table>
+    </div> 
+
+
+    <script>
+
+        document.querySelectorAll('.time-slot').forEach(slot => {
+            slot.addEventListener('click', function() {
+                const time = this.textContent; 
+                const day = this.parentElement.getAttribute('data-day');
+
+                fetch('/request-slot', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ day, time }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if(data.success) {
+
+                        alert('Request made for ' + time);
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            });
+        });
+
+    </script>
+</body>
+</html>

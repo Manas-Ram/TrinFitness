@@ -1,0 +1,25 @@
+<html>
+<head>
+  <title><%= exerciseName %></title>
+</head>
+
+<body>
+  <h1 style="text-align:center; font: bold;"> <%= exerciseName %></h1>
+
+  <svg width="1425" height="500" xmlns="http://www.w3.org/2000/svg">
+    <rect width="825" height="500" x="300" y="0" rx="5" ry="5" fill="black" stroke="purple" stroke-width="5" />
+    <rect width="125" height="75" x="650" y="200" rx="20" ry="20" fill="red" />
+    <polygon points="690,215, 750,240 690,265" fill="white" /> 
+  </svg>
+
+  <h2 style="text-align: center;"> Video Demonstration by <%= demonstratorName %></h2>
+
+  <h2 style="text-align:left"> Description/Tips </h2>
+
+  <ul style="text-align: left; font-size:large;"> 
+    <% descriptionTips.forEach(function(tip) { %>
+      <li> <%= tip %> </li>
+    <% }); %>
+  </ul>
+</body>
+</html>

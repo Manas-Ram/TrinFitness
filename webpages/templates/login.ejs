@@ -1,0 +1,29 @@
+<html>
+<head>
+    <link rel="stylesheet" href="menu.css">
+    <title>TrinFitness Login</title>
+</head>
+
+<body>
+    <h1>Welcome to TrinFitness</h1>
+    <% if (errorMessage) { %>
+        <div class="error"><%= errorMessage %></div>
+    <% } %>
+    <div class="form">
+        <form action="/login" method="post">
+            <div class="subform">
+                <label for="username">Username:</label>
+                <input id="username_input" type="text" name="username" value="<%= typeof username !== 'undefined' ? username : '' %>" /> <br />
+            </div>
+            <br>
+            <div class="subform">
+                <label for="password">Password:</label>
+                <input id="password_input" type="password" name="password" /> <br />
+            </div>
+            <button type="submit">Login</button>
+        </form>
+    </div>
+    <h2 id="mid"><a href="menu.html">Lunch Menu</a></h2>
+
+</body>
+</html>

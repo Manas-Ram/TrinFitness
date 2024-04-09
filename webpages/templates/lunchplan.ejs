@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Lunch Plan</title>
+    <link rel="stylesheet" href="./lunchplan.css">
+</head>
+<body>
+    <h1>Recommendation</h1>
+    <div id="card">
+        <h2 class="middle">What kind of meal are you looking for?</h2>
+        <select class="type" name="type">
+            <% mealTypes.forEach(function(mealType) { %>
+                <option value="<%= mealType.value %>"><%= mealType.display %></option>
+            <% }); %>
+        </select>
+        <h2 class="middle">Indicate Allergies/Dietary Information:</h2>
+        <form id="checklist">
+            <% dietaryRestrictions.forEach(function(restriction) { %>
+                <input type="checkbox" id="<%= restriction.id %>" name="<%= restriction.name %>" value="<%= restriction.value %>">
+                <label for="<%= restriction.id %>"> <%= restriction.label %> </label><br>
+            <% }); %>
+        </form>
+        <button type="button" id="button">Click to Find Suitable Lunch</button>
+    </div>
+    <script src="path/to/your/javascript.js"></script> <!-- If you have a JS file to handle the button click -->
+</body>
+</html>

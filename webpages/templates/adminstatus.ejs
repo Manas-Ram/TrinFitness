@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Analytics Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px;
+        }
+        .side {
+            width: 48%;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .header {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Admin Status Page</h1>
+    <div class="container">
+        <div class="side" id="loggedInUser">
+            <div class="header">Logged-in User</div>
+            <p>Name: <%= loggedInUser.name %></p>
+            <p>Role: <%= loggedInUser.role %></p>
+        </div>
+
+        <!-- Wellness Center Check Requests Section -->
+        <div class="side" id="wellnessRequests">
+            <div class="header">Wellness Center Check Requests</div>
+            <ul>
+                <% wellnessRequests.forEach(function(request) { %>
+                    <li><%= request.name %> requested on <%= request.date %></li>
+                <% }); %>
+            </ul>
+        </div>
+    </div>
+    <canvas id="myChart" style="width:100%;max-width:700px"></canvas>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+</body>
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Dashboard</title>
+    <link rel="stylesheet" href="teacherdashboard.css">
+    <style>
+        body {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px;
+        }
+        .requests {
+            width: 48%;
+            box-shadow: 0 0 5px rgba(0,0,0,0.1);
+            margin-right: 2%;
+        }
+        .request {
+            border-bottom: 1px solid #eee;
+            padding: 10px;
+        }
+        .calendar {
+            display: flex;
+            flex-direction: column;
+            width: 48%;
+            box-shadow: 0 0 5px rgba(0,0,0,0.1);
+            padding: 10px;
+        }
+        .day {
+            margin-bottom: 10px;
+        }
+        .time-slots {
+            display: flex;
+            flex-direction: column;
+        }
+        .time-slot {
+            padding: 5px;
+            border-top: 1px solid #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+
+<div class="requests">
+    <h2>Wellness Center Requests</h2>
+    <% wellnessRequests.forEach(function(request) { %>
+        <div class="request" data-request-id="<%= request.id %>">
+            <p><%= request.time %> - <%= request.student %></p>
+            <button class="btn accept">Accept</button>
+            <button class="btn deny">Deny</button>
+        </div>
+    <% }); %>
+</div>
+
+<div class="calendar">
+    <h2>Weekly Calendar</h2>
+    <% weeklyCalendar.forEach(function(day) { %>
+        <div class="day">
+            <h3><%= day.name %></h3>
+            <% day.timeSlots.forEach(function(slot) { %>
+                <div class="time-slot"><%= slot %></div>
+            <% }); %>
+        </div>
+    <% }); %>
+</div>
+<script>
+    document.querySelectorAll('.btn.accept, .btn.deny').forEach(button => {
+        button.addEventListener('click', function() {
+            const action = this.classList.contains('accept') ? 'accept' : 'deny';
+            const requestId = this.parentElement.getAttribute('data-request-id');
+            fetch('/handle-request', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ requestId, action }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if(data.success) {
+                    alert('Request ' + action + 'ed');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    });
+    </script>
+    
+
+</body>
+</html>

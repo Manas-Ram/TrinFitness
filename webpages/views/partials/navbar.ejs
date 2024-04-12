@@ -1,11 +1,4 @@
-<html>
-<head>
-  <title><%= exerciseName %></title>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-</head>
-
-<body>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <a class="navbar-brand" href="/">
       </a>
@@ -39,22 +32,3 @@
       </ul>
     </div>
   </nav>
-  <h1 style="text-align:center; font: bold;"> <%= exerciseName %></h1>
-
-  <svg width="1425" height="500" xmlns="http://www.w3.org/2000/svg">
-    <rect width="825" height="500" x="300" y="0" rx="5" ry="5" fill="black" stroke="purple" stroke-width="5" />
-    <rect width="125" height="75" x="650" y="200" rx="20" ry="20" fill="red" />
-    <polygon points="690,215, 750,240 690,265" fill="white" /> 
-  </svg>
-
-  <h2 style="text-align: center;"> Video Demonstration by <%= demonstratorName %></h2>
-
-  <h2 style="text-align:left"> Description/Tips </h2>
-
-  <ul style="text-align: left; font-size:large;"> 
-    <% descriptionTips.forEach(function(tip) { %>
-      <li> <%= tip %> </li>
-    <% }); %>
-  </ul>
-</body>
-</html>

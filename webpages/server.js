@@ -1,11 +1,18 @@
+const { response } = require('express');
 const express = require('express');
 const app = express();
 const port = 3000;
 
 app.set('view engine', 'ejs');
+app.use(require('./controllers/auth'))
+
 app.use(express.static('public'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+app.use("",function(request, response){
+    response.redirect('/error?code=400');
+});
 
 
 let wellnessRequests = [{ name: 'Thierry Lawrence', date: '2024-03-12' },

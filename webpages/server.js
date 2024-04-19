@@ -141,6 +141,9 @@ app.get('/lunchplan', (req, res) => {
         ]
     });
 });
+app.get('/machine', (req, res) => {
+    res.redirect('/machine/bench-press');  // Redirect to the bench press machine as an example
+});
 
 
 app.get('/machine/bench-press', (req, res) => {

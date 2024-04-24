@@ -20,12 +20,16 @@ let menuOptions = {
         { name: "Tempeh Stir Fry", calories: 350, protein: "30g", carbs: "35g", fat: "15g" }
     ]
 };
-let weeklyCalendar = {
+const initializeWeek = () => ({
     'Monday': { '8:55 - 9:45': null, '9:45 - 10:35': null },
     'Tuesday': { '8:55 - 9:45': null, '9:45 - 10:35': null },
     'Wednesday': { '8:55 - 9:45': null, '9:45 - 10:35': null },
     'Thursday': { '8:55 - 9:45': null, '9:45 - 10:35': null },
     'Friday': { '8:55 - 9:45': null, '9:45 - 10:35': null }
+});
+let weeklyCalendar = {
+    'February 26th - March 1st': initializeWeek(),
+    'March 4th - March 8th': initializeWeek()
 };
 let calendarArray = Object.keys(weeklyCalendar).map(day => ({
     name: day,
@@ -71,35 +75,38 @@ app.get('/', (req, res) => {
     res.render('login.ejs', {errorMessage: ''});
 });
 app.post('/request-slot', (req, res) => {
-    const { day, time, user } = req.body;
-    if (weeklyCalendar[day] && weeklyCalendar[day].hasOwnProperty(time)) {
-        if (weeklyCalendar[day][time] === null) {
-            weeklyCalendar[day][time] = 'requested';
-            const newRequest = { day, time, user, status: 'pending' };
+    const { week, day, time, user } = req.body;
+    if (weeklyCalendar[week] && weeklyCalendar[week][day] && weeklyCalendar[week][day].hasOwnProperty(time)) {
+        if (weeklyCalendar[week][day][time] === null) {
+            weeklyCalendar[week][day][time] = 'requested';
+            const newRequest = { week, day, time, user, status: 'pending' };
             slotRequests.push(newRequest);
             res.json({ success: true, message: 'Slot requested successfully.', requestId: slotRequests.length - 1 });
         } else {
             res.status(400).json({ success: false, message: 'Slot is already taken or requested.' });
         }
     } else {
-        res.status(400).json({ success: false, message: 'Invalid day or time slot.' });
+        res.status(400).json({ success: false, message: 'Invalid week, day, or time slot.' });
     }
 });
 
 
 app.get('/teacherdashboard', (req, res) => {
 
-    const calendarArray = Object.keys(weeklyCalendar).map(day => ({
-        name: day,
-        timeSlots: Object.keys(weeklyCalendar[day]).map(time => ({
-            time: time,
-            status: weeklyCalendar[day][time]
+    const calendarArray = Object.keys(weeklyCalendar).map(week => ({
+        name: week,
+        days: Object.keys(weeklyCalendar[week]).map(day => ({
+            name: day,
+            timeSlots: Object.keys(weeklyCalendar[week][day]).map(time => ({
+                time: time,
+                status: weeklyCalendar[week][day][time] || "Open" 
+            }))
         }))
     }));
 
     res.render('teacherdashboard', {
-        slotRequests: slotRequests,  
-        weeklyCalendar: calendarArray  
+        slotRequests: slotRequests, 
+        weeklyCalendar: calendarArray 
     });
 });
 

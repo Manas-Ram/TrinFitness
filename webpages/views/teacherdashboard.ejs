@@ -92,14 +92,14 @@
     </div>
 
     <div class="calendar">
-        <h2>Weekly Calendar</h2>
-        <% weeklyCalendar.forEach(function(day) { %>
-            <div class="day">
-                <h3><%= day.name %></h3>
+        <% weeklyCalendar.forEach(function(week) { %>
+            <h2><%= week.name %></h2> 
+            <% week.days.forEach(function(day) { %>
+                <h3><%= day.name %></h3> 
                 <% day.timeSlots.forEach(function(slot) { %>
-                    <div class="time-slot"><%= slot.time %>: <%= slot.status ? slot.status : "Open" %></div>
+                    <div><%= slot.time %>: <%= slot.status %></div> 
                 <% }); %>
-            </div>
+            <% }); %>
         <% }); %>
     </div>
     <script>
@@ -114,7 +114,7 @@
               .then(data => {
                   if (data.success) {
                       alert(data.message);
-                      location.reload();  // Reload the page to reflect the new state
+                      location.reload();  
                   } else {
                       alert(data.message);
                   }

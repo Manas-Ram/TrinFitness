@@ -53,44 +53,14 @@
             <% }); %>
         </div>
     </div>
-    <!-- <table>
-        <tr>
-            <td>
-                <table class="menu_calendar">
-                    <tr class="menu_tr">
-                        <th class="menu_th">Monday</th>
-                        <th class="menu_th">Tuesday</th>
-                        <th class="menu_th">Wednesday</th>
-                        <th class="menu_th">Thursday</th>
-                        <th class="menu_th">Friday</th>
-                    </tr>
-                    <% menuOptions.forEach(function(optionRow) { %>
-                        <tr class="menu_tr">
-                            <% optionRow.forEach(function(option) { %>
-                                <td>
-                                    <div class="option_id">
-                                        <button class="option_id"><%= option.name %></button>
-                                        <div class="option_dropdown">Calories: <%= option.calories %></div>
-                                        <div class="option_dropdown">Protein: <%= option.protein %></div>
-                                        <div class="option_dropdown">Carbs: <%= option.carbs %></div>
-                                        <div class="option_dropdown">Fat: <%= option.fat %></div>
-                                    </div>
-                                </td>
-                            <% }); %>
-                        </tr>
-                    <% }); %>
-                </table>
-            </td>
-        </tr>
-    </table> -->
-    <h1>Weekly Menu Options</h1>
-    <% Object.keys(menuOptions).forEach(function(week) { %>
-        <h2><%= week %></h2>
-        <% menuOptions[week].forEach(function(option) { %>
-            <div>
-                <p><strong><%= option.name %></strong> - Calories: <%= option.calories %>, Protein: <%= option.protein %>, Carbs: <%= option.carbs %>, Fat: <%= option.fat %></p>
-            </div>
-        <% }); %>
-    <% }); %>
+   
+    <% weeks.forEach(function(week) { %>
+      <h2><%= week %></h2>
+      <% menuOptions[week].forEach(function(option) { %>
+          <div>
+              <strong><%= option.name %></strong> - Calories: <%= option.calories %>, Protein: <%= option.protein %>, Carbs: <%= option.carbs %>, Fat: <%= option.fat %>
+          </div>
+      <% }); %>
+  <% }); %>
 </body>
 </html>

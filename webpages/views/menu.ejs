@@ -53,7 +53,7 @@
             <% }); %>
         </div>
     </div>
-    <table>
+    <!-- <table>
         <tr>
             <td>
                 <table class="menu_calendar">
@@ -82,6 +82,15 @@
                 </table>
             </td>
         </tr>
-    </table>
+    </table> -->
+    <h1>Weekly Menu Options</h1>
+    <% Object.keys(menuOptions).forEach(function(week) { %>
+        <h2><%= week %></h2>
+        <% menuOptions[week].forEach(function(option) { %>
+            <div>
+                <p><strong><%= option.name %></strong> - Calories: <%= option.calories %>, Protein: <%= option.protein %>, Carbs: <%= option.carbs %>, Fat: <%= option.fat %></p>
+            </div>
+        <% }); %>
+    <% }); %>
 </body>
 </html>

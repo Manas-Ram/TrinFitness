@@ -76,50 +76,51 @@
         </div>
       </nav>
 
-<div class="requests">
-    <h2>Wellness Center Requests</h2>
-    <% wellnessRequests.forEach(function(request) { %>
-        <div class="request" data-request-id="<%= request.id %>">
-            <p><%= request.time %> - <%= request.student %></p>
-            <button class="btn accept">Accept</button>
-            <button class="btn deny">Deny</button>
-        </div>
-    <% }); %>
-</div>
+      <div class="requests">
+        <h2>Pending Requests</h2>
+        <% slotRequests.forEach(function(request, index) { %>
+            <div>
+                <%= request.user %> requested for <%= request.day %> at <%= request.time %>
+                <% if (request.status === 'pending') { %>
+                    <button onclick="handleRequest(<%= index %>, 'accept')">Accept</button>
+                    <button onclick="handleRequest(<%= index %>, 'deny')">Deny</button>
+                <% } else { %>
+                    Request <%= request.status %>.
+                <% } %>
+            </div>
+        <% }); %>
+    </div>
 
-<div class="calendar">
-    <h2>Weekly Calendar</h2>
-    <% weeklyCalendar.forEach(function(day) { %>
-        <div class="day">
-            <h3><%= day.name %></h3>
-            <% day.timeSlots.forEach(function(slot) { %>
-                <div class="time-slot"><%= slot %></div>
-            <% }); %>
-        </div>
-    <% }); %>
-</div>
-<script>
-    document.querySelectorAll('.btn.accept, .btn.deny').forEach(button => {
-        button.addEventListener('click', function() {
-            const action = this.classList.contains('accept') ? 'accept' : 'deny';
-            const requestId = this.parentElement.getAttribute('data-request-id');
+    <div class="calendar">
+        <h2>Weekly Calendar</h2>
+        <% weeklyCalendar.forEach(function(day) { %>
+            <div class="day">
+                <h3><%= day.name %></h3>
+                <% day.timeSlots.forEach(function(slot) { %>
+                    <div class="time-slot"><%= slot.time %>: <%= slot.status ? slot.status : "Open" %></div>
+                <% }); %>
+            </div>
+        <% }); %>
+    </div>
+    <script>
+        function handleRequest(index, action) {
             fetch('/handle-request', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ requestId, action }),
-            })
-            .then(response => response.json())
-            .then(data => {
-                if(data.success) {
-                    alert('Request ' + action + 'ed');
-                }
-            })
-            .catch(error => console.error('Error:', error));
-        });
-    });
-    </script>
+                body: JSON.stringify({ requestId: index, action: action })
+            }).then(response => response.json())
+              .then(data => {
+                  if (data.success) {
+                      alert(data.message);
+                      location.reload();  // Reload the page to reflect the new state
+                  } else {
+                      alert(data.message);
+                  }
+              });
+        }
+        </script>
     
 
 </body>

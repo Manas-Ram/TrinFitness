@@ -193,11 +193,13 @@ app.get('/machine/bench-press', (req, res) => {
 
 
 app.get('/menu', (req, res) => {
+    let weeks = Object.keys(menuOptions);
     res.render('menu', {
-        weeks: Object.keys(menuOptions),
+        weeks: weeks,
         menuOptions: menuOptions
     });
 });
+
 
 
 

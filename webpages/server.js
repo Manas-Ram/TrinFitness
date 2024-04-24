@@ -2,7 +2,38 @@ const { response } = require('express');
 const express = require('express');
 const app = express();
 const port = 3000;
-
+let slotRequests = [];  
+let wellnessRequests = [{ name: 'Thierry Lawrence', date: '2024-03-12' },
+{ name: 'Robbie Levine', date: '2024-03-11' }]
+let suggestions = [];
+let loggedInUser = {
+    name: 'Manas Ramesh',
+    role: 'Admin'
+}
+let menuOptions = {
+    'February 26th - March 1st': [
+        { name: "Grilled Chicken Salad", calories: 350, protein: "40g", carbs: "10g", fat: "15g" },
+        { name: "Vegan Bean Salad", calories: 300, protein: "15g", carbs: "40g", fat: "10g" }
+    ],
+    'March 4th - March 8th': [
+        { name: "Beef Stir Fry", calories: 400, protein: "50g", carbs: "20g", fat: "20g" },
+        { name: "Tempeh Stir Fry", calories: 350, protein: "30g", carbs: "35g", fat: "15g" }
+    ]
+};
+let weeklyCalendar = {
+    'Monday': { '8:55 - 9:45': null, '9:45 - 10:35': null },
+    'Tuesday': { '8:55 - 9:45': null, '9:45 - 10:35': null },
+    'Wednesday': { '8:55 - 9:45': null, '9:45 - 10:35': null },
+    'Thursday': { '8:55 - 9:45': null, '9:45 - 10:35': null },
+    'Friday': { '8:55 - 9:45': null, '9:45 - 10:35': null }
+};
+let calendarArray = Object.keys(weeklyCalendar).map(day => ({
+    name: day,
+    timeSlots: Object.keys(weeklyCalendar[day]).map(time => ({
+        time: time,
+        status: weeklyCalendar[day][time]
+    }))
+}));
 app.set('view engine', 'ejs');
 // app.use(require('./controllers/auth'))
 
@@ -15,40 +46,38 @@ app.use(express.urlencoded({ extended: true }));
 // });
 
 
-let wellnessRequests = [{ name: 'Thierry Lawrence', date: '2024-03-12' },
-{ name: 'Robbie Levine', date: '2024-03-11' }]
 app.post('/handle-request', (req, res) => {
-    const { requestId, action } = req.body; //update
-    const request = wellnessRequests.find(r => r.id === requestId);
-    if (request) {
-        request.status = action === 'accept' ? 'accepted' : 'denied';
-        res.json({ success: true, message: 'Request updated.' });
-        //update calendar
+    const { requestId, action } = req.body;
+    if (requestId < slotRequests.length) {
+        slotRequests[requestId].status = action === 'accept' ? 'accepted' : 'denied';
+        if (action === 'deny') {
+            const { day, time } = slotRequests[requestId];
+            if (weeklyCalendar[day][time] === 'requested') {
+                weeklyCalendar[day][time] = 'denied';
+            }
+        }
+        res.json({ success: true, message: 'Request updated successfully.' });
     } else {
         res.status(404).json({ success: false, message: 'Request not found.' });
     }
-    res.json({ success: true });
 });
 
-let weeklyCalendar = {
-    'Monday': { '8:55 - 9:45': null, '9:45 - 10:35': null },
-    'Tuesday': { '8:55 - 9:45': null, '9:45 - 10:35': null },
+// let weeklyCalendar = {
+//     'Monday': { '8:55 - 9:45': null, '9:45 - 10:35': null },
+//     'Tuesday': { '8:55 - 9:45': null, '9:45 - 10:35': null },
 
-};
+// };
 app.get('/', (req, res) => {
     res.render('login.ejs', {errorMessage: ''});
 });
 app.post('/request-slot', (req, res) => {
-    const { day, time } = req.body;
+    const { day, time, user } = req.body;
     if (weeklyCalendar[day] && weeklyCalendar[day].hasOwnProperty(time)) {
-
         if (weeklyCalendar[day][time] === null) {
-
             weeklyCalendar[day][time] = 'requested';
-
-            slotRequests.push({ day, time, status: 'pending' });
-
-            res.json({ success: true, message: 'Slot requested successfully.' });
+            const newRequest = { day, time, user, status: 'pending' };
+            slotRequests.push(newRequest);
+            res.json({ success: true, message: 'Slot requested successfully.', requestId: slotRequests.length - 1 });
         } else {
             res.status(400).json({ success: false, message: 'Slot is already taken or requested.' });
         }
@@ -59,40 +88,40 @@ app.post('/request-slot', (req, res) => {
 
 
 app.get('/teacherdashboard', (req, res) => {
+
+    const calendarArray = Object.keys(weeklyCalendar).map(day => ({
+        name: day,
+        timeSlots: Object.keys(weeklyCalendar[day]).map(time => ({
+            time: time,
+            status: weeklyCalendar[day][time]
+        }))
+    }));
+
     res.render('teacherdashboard', {
-        wellnessRequests: [
-            { time: '10:00 AM', student: 'Student A' },
-            { time: '11:45 AM', student: 'Student B' }
-            
-        ],
-        weeklyCalendar: [
-            { name: 'Monday', timeSlots: ['8:55 - 9:45', '9:45 - 10:35'] },
-            { name: 'Tuesday', timeSlots: ['8:55 - 9:45', '9:45 - 10:35'] }
-        ]
+        slotRequests: slotRequests,  
+        weeklyCalendar: calendarArray  
     });
 });
-
-
 
 app.get('/adminstatus', (req, res) => {
     res.render('adminstatus', {
-        loggedInUser: { name: 'Manas Ramesh', role: 'Admin' },
-        wellnessRequests: [
-            { name: 'Thierry Lawrence', date: '2024-03-12' },
-            { name: 'Robbie Levine', date: '2024-03-11' }
-        ]
+        loggedInUser: loggedInUser,
+        wellnessRequests: wellnessRequests,
+        weeklyCalendar: weeklyCalendar,
+        slotRequests: slotRequests  
+        
     });
 });
 
+
 app.get('/calendar', (req, res) => {
     console.log('Rendering calendar with currentWeek:', 'February 26th - March 1st');
+    
     res.render('calendar', {
         currentWeek: 'February 26th - March 1st',
         weekDays: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-        weeks: [
-            'February 26th - March 1st',
-            'March 4th - March 8th',
-        ]
+        weeks: ['February 26th - March 1st', 'March 4th - March 8th'],
+        weeklyCalendar: weeklyCalendar
     });
 });
 
@@ -130,19 +159,21 @@ app.post('/login', (req, res) => {
 app.get('/lunchplan', (req, res) => {
     res.render('lunchplan', {
         mealTypes: [
-            { value: 'protein', display: 'High Protein' },
-            { value: 'fat', display: 'High Fat' }
+            { value: 'high_protein', display: 'High Protein' },
+            { value: 'high_fat', display: 'High Fat' }
 
         ],
         dietaryRestrictions: [
+            { id: 'none', name: 'none', value: 'None', label: 'No Restriction' },
             { id: 'vegan', name: 'vegan', value: 'Vegan', label: 'Vegan' },
             { id: 'vegetarian', name: 'vegetarian', value: 'Vegetarian', label: 'Vegetarian' }
 
-        ]
+        ],
+        suggestions: suggestions
     });
 });
 app.get('/machine', (req, res) => {
-    res.redirect('/machine/bench-press');  // Redirect to the bench press machine as an example
+    res.redirect('/machine/bench-press'); 
 });
 
 
@@ -163,24 +194,47 @@ app.get('/machine/bench-press', (req, res) => {
 
 app.get('/menu', (req, res) => {
     res.render('menu', {
-        weeks: [
-            'February 26th - March 1st',
-            'March 4th - March 8th'
-            //do rest
-        ],
-        menuOptions: [
-            [
-                { name: 'Option #1', calories: 'XYZ', protein: 'XYZ', carbs: 'XYZ', fat: 'XYZ' }
-                // add whatever
-            ],
-            // do the rest later
-        ]
+        weeks: Object.keys(menuOptions),
+        menuOptions: menuOptions
     });
 });
 
 
 
 
+app.post('/lunchplan', (req, res) => {
+    const { mealType, dietaryRestriction } = req.body;
+    let filteredOptions = [];
+
+
+    Object.values(menuOptions).flat().forEach(menuItem => {
+        let meetsCriteria = true;
+
+        // Filter logic (simplified for brevity)
+        if (mealType === 'high_protein' && parseInt(menuItem.protein) < 30) meetsCriteria = false;
+        if (mealType === 'high_fat' && parseInt(menuItem.fat) < 15) meetsCriteria = false;
+        if (dietaryRestriction !== 'none' && !menuItem.name.toLowerCase().includes(dietaryRestriction.toLowerCase())) {
+            meetsCriteria = false;
+        }
+
+        if (meetsCriteria) {
+            filteredOptions.push(menuItem);
+        }
+    });
+
+    res.render('lunchplan', {
+        mealTypes: [
+            { value: 'high_protein', display: 'High Protein' },
+            { value: 'high_fat', display: 'High Fat' }
+        ],
+        dietaryRestrictions: [
+            { id: 'none', name: 'none', value: 'None', label: 'No Restriction' },
+            { id: 'vegan', name: 'vegan', value: 'Vegan', label: 'Vegan' },
+            { id: 'vegetarian', name: 'vegetarian', value: 'Vegetarian', label: 'Vegetarian' }
+        ],
+        suggestions: filteredOptions
+    });
+});
 
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`)

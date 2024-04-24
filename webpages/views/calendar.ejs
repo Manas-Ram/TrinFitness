@@ -103,7 +103,7 @@
             <label for="taken">Attending</label>
         </fieldset>
     </div>
-    <div>
+    <!-- <div>
         <table class="calendar">
             <tr>
                 <% weekDays.forEach(function(day) { %>
@@ -175,34 +175,45 @@
             </tr>
             
         </table>
-    </div> 
+    </div>  -->
+    <% weeks.forEach(function(week) { %>
+        <div><%= week %></div>
+        <% weekDays.forEach(function(day) { %>
+            <% if (weeklyCalendar[day]) { %>
+                <% Object.keys(weeklyCalendar[day]).forEach(function(time) { %>
+                    <div><%= day %> <%= time %>:
+                        <% if (weeklyCalendar[day][time] === null) { %>
+                            <button onclick="requestSlot('<%= day %>', '<%= time %>')">Request</button>
+                        <% } else if (weeklyCalendar[day][time] === 'requested') { %>
+                            <button disabled>Requested</button>
+                        <% } else { %>
+                            <button disabled style="text-decoration: line-through;">Denied</button>
+                        <% } %>
+                    </div>
+                <% }) %>
+            <% } %>
+        <% }) %>
+    <% }) %>
 
 
     <script>
-
-        document.querySelectorAll('.time-slot').forEach(slot => {
-            slot.addEventListener('click', function() {
-                const time = this.textContent; 
-                const day = this.parentElement.getAttribute('data-day');
-
-                fetch('/request-slot', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ day, time }),
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if(data.success) {
-
-                        alert('Request made for ' + time);
-                    }
-                })
-                .catch(error => console.error('Error:', error));
-            });
-        });
-
-    </script>
+        function requestSlot(day, time) {
+            fetch('/request-slot', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ day, time, user: 'YourUsername' })  // Replace 'YourUsername' with dynamic session username if available
+            }).then(response => response.json())
+              .then(data => {
+                  if (data.success) {
+                      alert(data.message);
+                      location.reload();  // Reload the page to update the button state
+                  } else {
+                      alert(data.message);
+                  }
+              });
+        }
+        </script>
 </body>
 </html>

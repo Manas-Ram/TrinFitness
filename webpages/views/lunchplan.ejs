@@ -43,7 +43,7 @@
           </ul>
         </div>
       </nav>
-    <h1>Recommendation</h1>
+    <!-- <h1>Recommendation</h1>
     <div id="card">
         <h2 class="middle">What kind of meal are you looking for?</h2>
         <select class="type" name="type">
@@ -58,8 +58,36 @@
                 <label for="<%= restriction.id %>"> <%= restriction.label %> </label><br>
             <% }); %>
         </form>
-        <button type="button" id="button">Click to Find Suitable Lunch</button>
+        <button type="button" id="button">Click to Find Suitable Lunch</button> -->
+        <h1>Create Your Custom Lunch Plan</h1>
+        <form action="/lunchplan" method="post">
+            <label for="mealType">Meal type:</label>
+            <select name="mealType" id="mealType">
+                <option value="high_protein">High Protein</option>
+                <option value="high_fat">High Fat</option>
+            </select>
+    
+            <label for="dietaryRestriction">Dietary Restriction:</label>
+            <select name="dietaryRestriction" id="dietaryRestriction">
+                <option value="none">No Restriction</option>
+                <option value="vegan">Vegan</option>
+                <option value="vegetarian">Vegetarian</option>
+            </select>
+    
+            <button type="submit">Generate</button>
+        </form>
+    
+        <% if (suggestions && suggestions.length > 0) { %>
+          <h2>Suggested Meals</h2>
+          <ul>
+              <% suggestions.forEach(function(item) { %>
+                  <li><%= item.name %> - Protein: <%= item.protein %>, Fat: <%= item.fat %>, Carbs: <%= item.carbs %>, Calories: <%= item.calories %></li>
+              <% }); %>
+          </ul>
+      <% } else { %>
+          <p>No suggestions found. Try adjusting your filters.</p>
+      <% } %>
     </div>
-    <script src="path/to/your/javascript.js"></script> 
+    
 </body>
 </html>

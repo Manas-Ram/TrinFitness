@@ -81,8 +81,40 @@
                 <% }); %>
             </ul>
         </div>
+        <div>
+          <h2>Review Requests</h2>
+          <% slotRequests.forEach(function(request, index) { %>
+              <div>
+                  <%= request.user %> requested for <%= request.day %> at <%= request.time %>
+                  <% if (request.status === 'pending') { %>
+                      <button onclick="handleRequest(<%= index %>, 'accept')">Yes</button>
+                      <button onclick="handleRequest(<%= index %>, 'deny')">No</button>
+                  <% } else { %>
+                      Request <%= request.status %>.
+                  <% } %>
+              </div>
+          <% }) %>
+      </div>
     </div>
     <canvas id="myChart" style="width:100%;max-width:700px"></canvas>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+    <script>
+      function handleRequest(index, action) {
+          fetch('/handle-request', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ requestId: index, action: action })
+          }).then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(data.message);
+                    location.reload();  // Reload the page to reflect the new state
+                } else {
+                    alert(data.message);
+                }
+            });
+      }
+      </script>
 </body>
 </html>

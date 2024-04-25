@@ -176,44 +176,59 @@
             
         </table>
     </div>  -->
-    <% Object.keys(weeklyCalendar).forEach(function(week) { %>
-        <h2><%= week %></h2>
-        <% Object.keys(weeklyCalendar[week]).forEach(function(day) { %>
-            <% if (weeklyCalendar[week][day]) { %>
-                <% Object.keys(weeklyCalendar[week][day]).forEach(function(time) { %>
-                    <div><%= day %> <%= time %>:
-                        <% if (weeklyCalendar[week][day][time] === null) { %>
-                            <button onclick="requestSlot('<%= week %>', '<%= day %>', '<%= time %>')">Request</button>
-                        <% } else { %>
-                            <button disabled>Requested</button>
-                        <% } %>
-                    </div>
-                <% }); %>
-            <% } else { %>
-                <p>No times available for <%= day %>.</p>
-            <% } %>
-        <% }); %>
-    <% }); %>
+    <div>
+        <table class="calendar">
+            <tr>
+                <th>Monday</th>
+                <th>Tuesday</th>
+                <th>Wednesday</th>
+                <th>Thursday</th>
+                <th>Friday</th>
+            </tr>
+            <% // Assuming the time slots are the same for every day of the week %>
+            <% // Get the time slots from the first day of the week %>
+            <% let timeSlots = Object.keys(weeklyCalendar['February 26th - March 1st']['Monday']); %>
+            <% timeSlots.forEach(function(time) { %>
+                <tr>
+                    <% // Loop through each day of the week for this time slot %>
+                    <% Object.keys(weeklyCalendar['February 26th - March 1st']).forEach(function(day) { %>
+                        <td class="<%= weeklyCalendar['February 26th - March 1st'][day][time] ? 'request-slot' : 'time-slot' %>">
+                            <%= time %>
+                            <% if (weeklyCalendar['February 26th - March 1st'][day][time]) { %>
+                                <% if (weeklyCalendar['February 26th - March 1st'][day][time] === 'requested') { %>
+                                    <span>Requested</span>
+                                <% } else { %>
+                                    <span><%= weeklyCalendar['February 26th - March 1st'][day][time] %></span>
+                                <% } %>
+                            <% } else { %>
+                                <button type="button" class="request" onclick="requestSlot('<%= currentWeek %>','<%= day %>', '<%= time %>')">Request</button>
+                            <% } %>
+                        </td>
+                    <% }); %>
+                </tr>
+            <% }); %>
+        </table>
+    </div>
 
 
     <script>
         function requestSlot(week, day, time) {
-    fetch('/request-slot', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ week, day, time, user: 'YourUsername' })  //replace with google name
-    }).then(response => response.json())
-      .then(data => {
-          if (data.success) {
-              alert(data.message);
-              location.reload();  
-          } else {
-              alert(data.message);
-          }
-      });
-}
+            fetch('/request-slot', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ week, day, time, user: 'YourUsername' })  // Replace 'YourUsername' with dynamic session username if available
+            }).then(response => response.json())
+              .then(data => {
+                  if (data.success) {
+                      alert(data.message);
+                      location.reload();  // Reload the page to update the button state
+                  } else {
+                      alert(data.message);
+                  }
+              });
+        }
         </script>
 </body>
 </html>

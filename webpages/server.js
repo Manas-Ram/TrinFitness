@@ -21,11 +21,11 @@ let menuOptions = {
     ]
 };
 const initializeWeek = () => ({
-    'Monday': { '8:55 - 9:45': null, '9:45 - 10:35': null },
-    'Tuesday': { '8:55 - 9:45': null, '9:45 - 10:35': null },
-    'Wednesday': { '8:55 - 9:45': null, '9:45 - 10:35': null },
-    'Thursday': { '8:55 - 9:45': null, '9:45 - 10:35': null },
-    'Friday': { '8:55 - 9:45': null, '9:45 - 10:35': null }
+    'Monday': { '8:55 - 9:45': null, '9:45 - 10:40': null, '10:40-11:15': null, '11:15-12:05': null, '12:05-1:00': null, '1:00-1:40': null, '1:40-2:35': null, '2:35-3:25':null},
+    'Tuesday': { '8:55 - 9:45': null, '9:45 - 10:40': null , '10:40-11:15': null, '11:15-12:05': null, '12:05-1:00': null, '1:00-1:40': null, '1:40-2:35': null, '2:35-3:25':null},
+    'Wednesday': { '8:55 - 9:45': null, '9:45 - 10:40': null , '10:40-11:15': null, '11:15-12:05': null, '12:05-1:00': null, '1:00-1:40': null, '1:40-2:35': null, '2:35-3:25':null},
+    'Thursday': { '8:55 - 9:45': null, '9:45 - 10:40': null , '10:40-11:15': null, '11:15-12:05': null, '12:05-1:00': null, '1:00-1:40': null, '1:40-2:35': null, '2:35-3:25':null},
+    'Friday': { '8:55 - 9:45': null, '9:45 - 10:40': null , '10:40-11:15': null, '11:15-12:05': null, '12:05-1:00': null, '1:00-1:40': null, '1:40-2:35': null, '2:35-3:25':null}
 });
 let weeklyCalendar = {
     'February 26th - March 1st': initializeWeek(),
@@ -53,14 +53,24 @@ app.use(express.urlencoded({ extended: true }));
 app.post('/handle-request', (req, res) => {
     const { requestId, action } = req.body;
     if (requestId < slotRequests.length) {
-        slotRequests[requestId].status = action === 'accept' ? 'accepted' : 'denied';
-        if (action === 'deny') {
-            const { day, time } = slotRequests[requestId];
-            if (weeklyCalendar[day][time] === 'requested') {
-                weeklyCalendar[day][time] = 'denied';
+        const { week, day, time } = slotRequests[requestId];
+
+        if (weeklyCalendar[week] && weeklyCalendar[week][day] && weeklyCalendar[week][day].hasOwnProperty(time)) {
+            // Update the slotRequests status
+            slotRequests[requestId].status = action === 'accept' ? 'accepted' : 'denied';
+            
+            // Update the status in the weeklyCalendar
+            if (action === 'deny' && weeklyCalendar[week][day][time] === 'requested') {
+                weeklyCalendar[week][day][time] = 'denied';
+            } else if (action === 'accept' && weeklyCalendar[week][day][time] === 'requested') {
+                weeklyCalendar[week][day][time] = 'accepted';
             }
+
+            res.json({ success: true, message: `Request ${action}ed successfully.` });
+        } else {
+            console.log("Invalid week, day, or time slot referenced.");
+            return res.status(400).json({ success: false, message: 'Invalid week, day, or time slot.' });
         }
-        res.json({ success: true, message: 'Request updated successfully.' });
     } else {
         res.status(404).json({ success: false, message: 'Request not found.' });
     }

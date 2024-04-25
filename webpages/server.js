@@ -56,10 +56,9 @@ app.post('/handle-request', (req, res) => {
         const { week, day, time } = slotRequests[requestId];
 
         if (weeklyCalendar[week] && weeklyCalendar[week][day] && weeklyCalendar[week][day].hasOwnProperty(time)) {
-            // Update the slotRequests status
+
             slotRequests[requestId].status = action === 'accept' ? 'accepted' : 'denied';
-            
-            // Update the status in the weeklyCalendar
+
             if (action === 'deny' && weeklyCalendar[week][day][time] === 'requested') {
                 weeklyCalendar[week][day][time] = 'denied';
             } else if (action === 'accept' && weeklyCalendar[week][day][time] === 'requested') {
@@ -229,7 +228,7 @@ app.post('/lunchplan', (req, res) => {
     Object.values(menuOptions).flat().forEach(menuItem => {
         let meetsCriteria = true;
 
-        // Filter logic (simplified for brevity)
+        
         if (mealType === 'high_protein' && parseInt(menuItem.protein) < 30) meetsCriteria = false;
         if (mealType === 'high_fat' && parseInt(menuItem.fat) < 15) meetsCriteria = false;
         if (dietaryRestriction !== 'none' && !menuItem.name.toLowerCase().includes(dietaryRestriction.toLowerCase())) {

@@ -4,6 +4,7 @@ const app = express();
 const port = 3000;
 const multer = require('multer')
 let slotRequests = [];  
+const backendRoutes = require('../backend/routes');
 let wellnessRequests = [{ name: 'Thierry Lawrence', date: '2024-03-12' },
 { name: 'Robbie Levine', date: '2024-03-11' }]
 let suggestions = [];
@@ -11,17 +12,7 @@ let loggedInUser = {
     name: 'Manas Ramesh',
     role: 'Admin'
 }
-// let privateUpload = multer({ storage: privateStorage });
-// let publicStorage = multer.diskStorage({
-//     destination: function (req, file, cb) {
-//         cb(null, './public/images')
-//     },
-//     filename: function (req, file, cb) {
-//         console.log(file)
-//         cb(null, Date.now() + '-' + file.originalname.replace(' ', '-'));
-//     }
-// });
-// let publicUpload = multer ({ storage: publicStorage });
+
 let menuOptions = {
     'February 26th - March 1st': [
         { name: "Grilled Chicken Salad", calories: 350, protein: "40g", carbs: "10g", fat: "15g" },
@@ -51,8 +42,7 @@ let calendarArray = Object.keys(weeklyCalendar).map(day => ({
     }))
 }));
 app.set('view engine', 'ejs');
-// app.use(require('./controllers/auth'))
-
+app.use('/api', backendRoutes);
 app.use(express.static('public'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -131,20 +121,6 @@ app.get('/teacherdashboard', (req, res) => {
     });
 });
 
-app.post('/upload/photo', publicUpload.single('picture'), (req, res, next) => {
-    const file = req.file;
-    if (!file) {
-        const error = {
-            'httpStatusCode' : 400, 
-            'message': 'Please upload a file'
-
-        }
-        res.send(error);
-    }
-    res.render('confirmation', {
-        photoLocation: "/images/"+file.filename
-    });
-})
 
 
 app.get('/adminstatus', (req, res) => {

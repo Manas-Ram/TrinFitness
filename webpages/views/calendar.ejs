@@ -18,10 +18,7 @@
         }
         .calendar th, .calendar td {
             border: 1px solid #ddd;
-            padding-top: 12px;
-            padding-bottom: 12px;
-            padding-right:10px;
-            padding-left: 10px;
+            padding: 12px;
             text-align: center;
             vertical-align: top;
         }
@@ -32,63 +29,65 @@
         .time-slot {
             color: #555;
         }
-        .request-slot, .accepted-slot, .attending-slot {
-            color: #721c24;
+        .request-slot, .accepted-slot, .attending-slot, .denied-slot {
             text-decoration: line-through;
         }
         .accepted-slot {
             background-color: #d4edda;
             color: #155724;
+            text-decoration: line-through;
+        }
+        .denied-slot {
+            background-color: #f8d7da;
+            color: #721c24;
+            text-decoration: line-through;
         }
         .attending-slot {
             background-color: #fff3cd;
             color: #856404;
         }
-    </style>  
-      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">  
+    </style>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="/">Home</a>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <a class="navbar-brand" href="/">
-          </a>
-          <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-              <a class="nav-link" href="/">Home</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href='/adminstatus'> Admin Status</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" id = "calendar"href='/calendar'> Calendar</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" id = "demos"href='/demos'> Demos</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" id = "lunchplan"href='/lunchplan'> lunchplan </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" id = "machine"href='/machine/bench-press'> Machine </a>
-              </li>
-    
-              <li class="nav-item">
-                <a class="nav-link" id = "menu"href='/menu'>Menu</a>
-              </li>
-    
-              <li class="nav-item">
-                <a class="nav-link" id = ""href='/teacherdashboard'> Teacher Dashboard</a>
-              </li>
-          </ul>
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href='/adminstatus'>Admin Status</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="calendar" href='/calendar'>Calendar</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="demos" href='/demos'>Demos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="lunchplan" href='/lunchplan'>Lunchplan</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="machine" href='/machine/bench-press'>Machine</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="menu" href='/menu'>Menu</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="" href='/teacherdashboard'>Teacher Dashboard</a>
+                </li>
+            </ul>
         </div>
-      </nav>
-    
+    </nav>
+
     <div class="dropdown">
-        <button class="dropbtn">Current Week: <%= currentWeek %> </button>
+        <button class="dropbtn">Current Week: <%= currentWeek %></button>
         <div class="dropdown-content">
-          <% weeks.forEach(function(week) { %>
-            <a href="#"><%= week %></a>
-          <% }); %>
+            <% weeks.forEach(function(week) { %>
+                <a href="#"><%= week %></a>
+            <% }); %>
         </div>
     </div>
     <div>
@@ -103,105 +102,23 @@
             <label for="taken">Attending</label>
         </fieldset>
     </div>
-    <!-- <div>
+    <div>
         <table class="calendar">
             <tr>
                 <% weekDays.forEach(function(day) { %>
                     <th><%= day %></th>
                 <% }); %>
             </tr>
-            <tr>
-                <td class="time-slot">8:15 AM</td>
-                <td class="time-slot"><button type="button" class = "request filled"  disabled>Request: 8:15 AM</button> <input type="checkbox" class = "align" id="accepted" name="accepted" checked /></td>
-                <td class="time-slot">8:15 AM</td>
-                <td class="request-slot">8:15 AM</td>
-                <td class="time-slot">8:15 AM</td>
-            </tr>
-            <tr>
-                <td class="request-slot">8:55 AM</td>
-                <td class="time-slot">8:55 AM</td>
-                <td class="time-slot">8:55 AM</td>
-                <td class="time-slot">8:55 AM</td>
-                <td class="time-slot"><button type="button" class = "request filled"  disabled>Request: 8:55 AM</button> <input type="checkbox" class = "align" id="accepted" name="accepted" checked /></td>
-            </tr>
-            <tr>
-                <td class="time-slot">9:50 AM</td>
-                <td class="request-slot">9:50 AM</td>
-                <td class="time-slot"><button type="button" class = "request filled"  disabled>Request: 9:50 AM</button> <input type="checkbox" class = "align" id="accepted" name="accepted" checked /></td>
-                <td class="time-slot">9:50 AM</td>
-                <td class="time-slot">9:50 AM</td>
-            </tr>
-            <tr>
-                <td class="request-slot">10:45 AM</td>
-                <td class="time-slot">10:45 AM</td>
-                <td class="time-slot">10:45 AM</td>
-                <td class="time-slot">10:45 AM</td>
-                <td class="request-slot">10:45 AM</td>
-            </tr>
-            <tr>
-                <td class="time-slot">11:15 AM</td>
-                <td class="time-slot">11:15 AM</td>
-                <td class="time-slot">11:15 AM</td>
-                <td class="time-slot">11:15 AM</td>
-                <td class="time-slot">11:15 AM</td>
-            </tr>
-            <tr>
-                <td class="time-slot">12:05 AM</td>
-                <td class="time-slot">12:05 AM</td>
-                <td class="time-slot">12:05 AM</td>
-                <td class="time-slot">12:05 AM</td>
-                <td class="request-slot">12:05 AM</td>
-            </tr>
-            <tr>
-                <td class="request-slot">1:00 PM</td>
-                <td class="time-slot">1:00 PM</td>
-                <td class="request-slot">1:00 PM</td>
-                <td class="time-slot">1:00 PM</td>
-                <td class="time-slot">1:00 PM</td>
-            </tr>
-            <tr>
-                <td class="time-slot">1:40 PM</td>
-                <td class="request-slot">1:40 PM</td>
-                <td class="time-slot">1:40 PM</td>
-                <td class="time-slot">1:40 PM</td>
-                <td class="request-slot">1:40 PM</td>
-            </tr>
-            <tr>
-                <td class="time-slot">2:35 PM</td>
-                <td class="time-slot">2:35 PM</td>
-                <td class="request-slot">2:35 PM</td>
-                <td class="time-slot">2:35 PM</td>
-                <td class="time-slot">2:35 PM</td>
-            </tr>
-            
-        </table>
-    </div>  -->
-    <div>
-        <table class="calendar">
-            <tr>
-                <th>Monday</th>
-                <th>Tuesday</th>
-                <th>Wednesday</th>
-                <th>Thursday</th>
-                <th>Friday</th>
-            </tr>
-            <% // Assuming the time slots are the same for every day of the week %>
-            <% // Get the time slots from the first day of the week %>
-            <% let timeSlots = Object.keys(weeklyCalendar['February 26th - March 1st']['Monday']); %>
+            <% let timeSlots = Object.keys(weeklyCalendar['Monday']); %>
             <% timeSlots.forEach(function(time) { %>
                 <tr>
-                    <% // Loop through each day of the week for this time slot %>
-                    <% Object.keys(weeklyCalendar['February 26th - March 1st']).forEach(function(day) { %>
-                        <td class="<%= weeklyCalendar['February 26th - March 1st'][day][time] ? 'request-slot' : 'time-slot' %>">
+                    <% weekDays.forEach(function(day) { %>
+                        <td class="<%= weeklyCalendar[day][time] === 'accepted' ? 'accepted-slot' : (weeklyCalendar[day][time] === 'denied' ? 'denied-slot' : 'time-slot') %>">
                             <%= time %>
-                            <% if (weeklyCalendar['February 26th - March 1st'][day][time]) { %>
-                                <% if (weeklyCalendar['February 26th - March 1st'][day][time] === 'requested') { %>
-                                    <span>Requested</span>
-                                <% } else { %>
-                                    <span><%= weeklyCalendar['February 26th - March 1st'][day][time] %></span>
-                                <% } %>
+                            <% if (weeklyCalendar[day][time] !== 'Open') { %>
+                                <%= weeklyCalendar[day][time] %>
                             <% } else { %>
-                                <button type="button" class="request" onclick="requestSlot('<%= currentWeek %>','<%= day %>', '<%= time %>')">Request</button>
+                                <button type="button" class="request" onclick="requestSlot('<%= currentWeek %>', '<%= day %>', '<%= time %>')">Request</button>
                             <% } %>
                         </td>
                     <% }); %>
@@ -209,7 +126,6 @@
             <% }); %>
         </table>
     </div>
-
 
     <script>
         function requestSlot(week, day, time) {
@@ -229,6 +145,6 @@
                   }
               });
         }
-        </script>
+    </script>
 </body>
 </html>

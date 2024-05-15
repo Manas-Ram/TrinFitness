@@ -1,66 +1,61 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <link rel="stylesheet" href="/menu.css">
-    <title>TrinFitness Menu</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Menu</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 </head>
-
-
-
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="/">Home</a>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <a class="navbar-brand" href="/">
-          </a>
-          <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-              <a class="nav-link" href="/">Home</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href='/adminstatus'> Admin Status</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" id = "calendar"href='/calendar'> Calendar</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" id = "demos"href='/demos'> Demos</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" id = "lunchplan"href='/lunchplan'> lunchplan </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" id = "machine"href='/machine/bench-press'> Machine </a>
-              </li>
-    
-              <li class="nav-item">
-                <a class="nav-link" id = "menu"href='/menu'>Menu</a>
-              </li>
-    
-              <li class="nav-item">
-                <a class="nav-link" id = ""href='/teacherdashboard'> Teacher Dashboard</a>
-              </li>
-          </ul>
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href='/adminstatus'>Admin Status</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href='/calendar'>Calendar</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href='/demos'>Demos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href='/lunchplan'>Lunchplan</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href='/machine/bench-press'>Machine</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href='/menu'>Menu</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href='/teacherdashboard'>Teacher Dashboard</a>
+                </li>
+            </ul>
         </div>
-      </nav>
-    <h1 class="menu_header">Trinity Cafeteria Menu</h1>
-    <div class="howto">Select a week to see the Trinity lunch for that week.</div><br>
-    <div class="howto">Hover over a food option to see more information about it.</div><br>
-    <div class="dropdown">
-        <button class="dropbtn">Select Week</button>
-        <div class="dropdown-content">
-            <% weeks.forEach(function(week) { %>
-              <a href="#"><%= week %></a>
-            <% }); %>
+    </nav>
+    <div class="container">
+        <h1>Menu</h1>
+        <div class="dropdown">
+            <button class="dropbtn">Select Week</button>
+            <div class="dropdown-content">
+                <% weeks.forEach(function(week) { %>
+                    <a href="#"><%= week %></a>
+                <% }); %>
+            </div>
         </div>
+        <% weeks.forEach(function(week) { %>
+            <h2><%= week %></h2>
+            <ul>
+                <% menuOptions.filter(option => option.week === week).forEach(function(option) { %>
+                    <li>
+                        <%= option.name %> - Calories: <%= option.calories %>, Protein: <%= option.protein %>, Carbs: <%= option.carbs %>, Fat: <%= option.fat %>
+                    </li>
+                <% }); %>
+            </ul>
+        <% }); %>
     </div>
-   
-    <% weeks.forEach(function(week) { %>
-      <h2><%= week %></h2>
-      <% menuOptions[week].forEach(function(option) { %>
-          <div>
-              <strong><%= option.name %></strong> - Calories: <%= option.calories %>, Protein: <%= option.protein %>, Carbs: <%= option.carbs %>, Fat: <%= option.fat %>
-          </div>
-      <% }); %>
-  <% }); %>
 </body>
 </html>

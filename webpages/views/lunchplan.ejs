@@ -11,83 +11,70 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <a class="navbar-brand" href="/">
-          </a>
-          <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-              <a class="nav-link" href="/">Home</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href='/adminstatus'> Admin Status</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" id = "calendar"href='/calendar'> Calendar</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" id = "demos"href='/demos'> Demos</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" id = "lunchplan"href='/lunchplan'> lunchplan </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" id = "machine"href='/machine/bench-press'> Machine </a>
-              </li>
-    
-              <li class="nav-item">
-                <a class="nav-link" id = "menu"href='/menu'>Menu</a>
-              </li>
-    
-              <li class="nav-item">
-                <a class="nav-link" id = ""href='/teacherdashboard'> Teacher Dashboard</a>
-              </li>
-          </ul>
+            <a class="navbar-brand" href="/">Home</a>
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href='/adminstatus'> Admin Status</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="calendar" href='/calendar'> Calendar</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="demos" href='/demos'> Demos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="lunchplan" href='/lunchplan'> Lunchplan </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="machine" href='/machine/bench-press'> Machine </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="menu" href='/menu'>Menu</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="" href='/teacherdashboard'> Teacher Dashboard</a>
+                </li>
+            </ul>
         </div>
-      </nav>
-    <!-- <h1>Recommendation</h1>
-    <div id="card">
-        <h2 class="middle">What kind of meal are you looking for?</h2>
-        <select class="type" name="type">
-            <% mealTypes.forEach(function(mealType) { %>
-                <option value="<%= mealType.value %>"><%= mealType.display %></option>
-            <% }); %>
-        </select>
-        <h2 class="middle">Indicate Allergies/Dietary Information:</h2>
-        <form id="checklist">
-            <% dietaryRestrictions.forEach(function(restriction) { %>
-                <input type="checkbox" id="<%= restriction.id %>" name="<%= restriction.name %>" value="<%= restriction.value %>">
-                <label for="<%= restriction.id %>"> <%= restriction.label %> </label><br>
-            <% }); %>
-        </form>
-        <button type="button" id="button">Click to Find Suitable Lunch</button> -->
+    </nav>
+    <div class="container">
         <h1>Create Your Custom Lunch Plan</h1>
+        <p>Choose your meal type and dietary restriction to generate a list of suitable lunch options.</p>
+        <p><strong>High Protein:</strong> Meals with at least 30g of protein.</p>
+        <p><strong>High Fat:</strong> Meals with at least 15g of fat.</p>
         <form action="/lunchplan" method="post">
-            <label for="mealType">Meal type:</label>
-            <select name="mealType" id="mealType">
-                <option value="high_protein">High Protein</option>
-                <option value="high_fat">High Fat</option>
-            </select>
-    
-            <label for="dietaryRestriction">Dietary Restriction:</label>
-            <select name="dietaryRestriction" id="dietaryRestriction">
-                <option value="none">No Restriction</option>
-                <option value="vegan">Vegan</option>
-                <option value="vegetarian">Vegetarian</option>
-            </select>
-    
-            <button type="submit">Generate</button>
+            <div class="form-group">
+                <label for="mealType">Meal type:</label>
+                <select class="form-control" name="mealType" id="mealType">
+                    <option value="no_restriction">No Restriction</option>
+                    <option value="high_protein">High Protein</option>
+                    <option value="high_fat">High Fat</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="dietaryRestriction">Dietary Restriction:</label>
+                <select class="form-control" name="dietaryRestriction" id="dietaryRestriction">
+                    <option value="none">No Restriction</option>
+                    <option value="vegan">Vegan</option>
+                    <option value="vegetarian">Vegetarian</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Generate</button>
         </form>
     
         <% if (suggestions && suggestions.length > 0) { %>
-          <h2>Suggested Meals</h2>
-          <ul>
-              <% suggestions.forEach(function(item) { %>
-                  <li><%= item.name %> - Protein: <%= item.protein %>, Fat: < %= item.fat %>, Carbs: <%= item.carbs %>, Calories: <%= item.calories %></li>
-              <% }); %>
-          </ul>
-      <% } else { %>
-          <p>No suggestions found. Try adjusting your filters.</p>
-      <% } %>
+            <h2>Suggested Meals</h2>
+            <ul>
+                <% suggestions.forEach(function(item) { %>
+                    <li><%= item.name %> - Protein: <%= item.protein %>, Fat: <%= item.fat %>, Carbs: <%= item.carbs %>, Calories: <%= item.calories %></li>
+                <% }); %>
+            </ul>
+        <% } else if (suggestions) { %> <!-- Check if suggestions exist but are empty -->
+            <p>No suggestions found. Try adjusting your filters.</p>
+        <% } %>
     </div>
-    
 </body>
 </html>

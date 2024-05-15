@@ -45,23 +45,23 @@ exports.acceptRequest = (req, res) => {
 
 exports.denyRequest = (req, res) => {
     const { id } = req.body;
-    console.log(`Denying request with ID: ${id}`);  // Add this line to log the request
+    console.log(`Denying request with ID: ${id}`);  
 
     SlotRequest.updateStatus(id, 'denied', (err, request) => {
         if (err) {
-            console.error(`Failed to deny slot request: ${err}`);  // Add this line to log the error
+            console.error(`Failed to deny slot request: ${err}`);  
             return res.status(500).json({ success: false, message: 'Failed to deny slot request' });
         }
         
-        console.log(`Slot request denied for week: ${request.week}, day: ${request.day}, time: ${request.time}`);  // Add this line to log the request details
+        console.log(`Slot request denied for week: ${request.week}, day: ${request.day}, time: ${request.time}`); 
         
         WeeklyCalendar.updateStatus(request.week, request.day, request.time, 'denied', (err) => {
             if (err) {
-                console.error(`Failed to update calendar: ${err}`);  // Add this line to log the error
+                console.error(`Failed to update calendar: ${err}`);  
                 return res.status(500).json({ success: false, message: 'Failed to update calendar' });
             }
 
-            console.log('Calendar updated to denied');  // Add this line to log the calendar update
+            console.log('Calendar updated to denied');  
             res.json({ success: true, message: 'Slot request denied successfully' });
         });
     });

@@ -1,15 +1,13 @@
 const sqlite3 = require('sqlite3').verbose();
 const db = new sqlite3.Database(':memory:');
 
-// Create tables
+
 db.serialize(() => {
     db.run("CREATE TABLE users (id INTEGER PRIMARY KEY, name TEXT, role TEXT)");
     db.run("CREATE TABLE slot_requests (id INTEGER PRIMARY KEY, week TEXT, day TEXT, time TEXT, user TEXT, status TEXT)");
     db.run("CREATE TABLE wellness_requests (id INTEGER PRIMARY KEY, name TEXT, date TEXT)");
     db.run("CREATE TABLE menu_options (id INTEGER PRIMARY KEY, week TEXT, name TEXT, calories INTEGER, protein TEXT, carbs TEXT, fat TEXT)");
     db.run("CREATE TABLE weekly_calendar (id INTEGER PRIMARY KEY, week TEXT, day TEXT, time TEXT, status TEXT)");
-
-    // Insert initial data
     db.run("INSERT INTO users (name, role) VALUES ('Manas Ramesh', 'Admin')");
     db.run("INSERT INTO wellness_requests (name, date) VALUES ('Thierry Lawrence', '2024-03-12')");
     db.run("INSERT INTO wellness_requests (name, date) VALUES ('Robbie Levine', '2024-03-11')");

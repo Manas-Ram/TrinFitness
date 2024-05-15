@@ -39,6 +39,7 @@
     <div class="container">
         
         <h1>Menu</h1>
+        
         <h2>Upload New Menu</h2>
         <form action="/menu/upload" method="post" enctype="multipart/form-data">
             <div class="form-group">
@@ -47,6 +48,15 @@
             </div>
             <button type="submit" class="btn btn-primary">Upload</button>
         </form>
+
+        <% if (uploadedFile && fileType === 'text') { %>
+            <h2>Uploaded File Content</h2>
+            <pre><%= uploadedFile %></pre>
+        <% } else if (uploadedFile && fileType === 'image') { %>
+            <h2>Uploaded Image</h2>
+            <img src="/uploads/<%= uploadedFile %>" alt="Uploaded Image" style="max-width: 100%; height: auto;">
+        <% } %>
+
         <div class="dropdown">
             <button class="dropbtn">Select Week</button>
             <div class="dropdown-content">

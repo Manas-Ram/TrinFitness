@@ -76,7 +76,7 @@
     <script>
         function updateRequest(id, action) {
             const url = action === 'accept' ? '/accept-request' : '/deny-request';
-            console.log(`Sending ${action} request for ID: ${id}`);  // Add this line to log the action
+            console.log(`Sending ${action} request for ID: ${id}`);  
             fetch(url, {
                 method: 'POST',
                 headers: {
@@ -87,13 +87,13 @@
               .then(data => {
                   if (data.success) {
                       alert(`Slot request ${action}ed successfully`);
-                      location.reload();  // Reload the page to update the button state
+                      location.reload();
                   } else {
                       alert(`Failed to ${action} slot request`);
-                      console.error(`Error: ${data.message}`);  // Add this line to log the error
+                      console.error(`Error: ${data.message}`); 
                   }
               }).catch(error => {
-                  console.error(`Fetch error: ${error}`);  // Add this line to log fetch errors
+                  console.error(`Fetch error: ${error}`);  
               });
         }
     </script>

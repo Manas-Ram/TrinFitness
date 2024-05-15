@@ -2,6 +2,8 @@ require('dotenv').config();
 const express = require('express');
 const multer = require('multer');
 const db = require('./models/database');
+const session = require('express-session');
+const passport = require('passport');
 const fs = require('fs');
 const path = require('path');
 const app = express();
@@ -14,6 +16,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); 
 
 const adminRoutes = require('./routes/adminRoutes');
+const { ensureAuthenticated, ensureAdmin } = require('./middlewares/authMiddleware');
 const calendarRoutes = require('./routes/calendarRoutes');
 const lunchplanRoutes = require('./routes/lunchplanRoutes');
 const slotRequestRoutes = require('./routes/slotRequestRoutes');
@@ -24,23 +27,63 @@ const demosRoutes = require('./routes/demosRoutes');
 const machineRoutes = require('./routes/machineRoutes');
 const menuRoutes = require('./routes/menuRoutes');
 const authRoutes = require('./controllers/auth');
+const KEYS = require('./config/keys');
+app.get('/', (req, res) => {
+    res.render('login', { user: req.user, errorMessage: req.query.error || '' });
+});
+app.use(session({
+    secret: KEYS.sessionSecret,
+    resave: false,
+    saveUninitialized: true,
+    cookie: { maxAge: 60000 }
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+
+
+app.use((req, res, next) => {
+    res.locals.user = req.user;
+    next();
+});
+
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'uploads/');
+    },
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + path.extname(file.originalname));
+    }
+});
+
+const upload = multer({ storage });
+
 app.use(authRoutes);
-const ensureAuthenticated = require('./middlewares/authMiddleware');
-app.use(adminRoutes,ensureAuthenticated);
-app.use(calendarRoutes);
-app.use(lunchplanRoutes);
-app.use(slotRequestRoutes);
+// const ensureAuthenticated = require('./middlewares/authMiddleware');
+app.use(adminRoutes,ensureAdmin);
+app.use(calendarRoutes, ensureAuthenticated);
+app.use(lunchplanRoutes,ensureAuthenticated);
+app.use(slotRequestRoutes,ensureAuthenticated);
 app.use(teacherDashboardRoutes,ensureAuthenticated);
 app.use(userRoutes);
 app.use(homeRoutes);
-app.use(demosRoutes);
-app.use(machineRoutes);
-app.use(menuRoutes,ensureAuthenticated);
+app.use(demosRoutes,ensureAuthenticated);
+app.use(machineRoutes,ensureAuthenticated);
+app.use(menuRoutes);
+
+app.post('/demos/upload', upload.single('file'), (req, res) => {
+    if (req.file) {
+        res.render('demos', { message: 'File uploaded successfully', filePath: '/uploads/' + req.file.filename });
+    } else {
+        res.render('demos', { message: 'File upload failed', filePath: null });
+    }
+});
+
+
 
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
 });
-
 
 
 

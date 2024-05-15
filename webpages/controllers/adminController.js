@@ -22,7 +22,12 @@ exports.getAdminStatus = (req, res) => {
                 SlotRequest.getAll((err, slotRequests) => {
                     if (err) return res.status(500).send(err);
 
-                    res.render('adminstatus', { loggedInUser, wellnessRequests, weeklyCalendar, slotRequests });
+                    res.render('adminstatus', { 
+                        loggedInUser: req.user, 
+                        wellnessRequests, 
+                        weeklyCalendar, 
+                        slotRequests 
+                    });
                 });
             });
         });

@@ -4,8 +4,7 @@ const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const session = require('express-session');
 const KEYS = require('../config/keys');
-
-let userProfile;
+const User = require('../models/User');
 
 router.use(session({
     secret: KEYS.sessionSecret,
@@ -22,9 +21,23 @@ passport.use(new GoogleStrategy({
     clientSecret: KEYS.googleClientSecret,
     callbackURL: 'http://localhost:3000/auth/google/callback'
 },
-function (accessToken, refreshToken, profile, done) {
-    userProfile = profile;
-    return done(null, userProfile);
+async function (accessToken, refreshToken, profile, done) {
+    const email = profile.emails[0].value;
+    const adminEmails = [
+        "manas.ramesh24@trinityschoolnyc.org",
+        "robert.levine24@trinityschoolnyc.org",
+        "thierry.lawrence24@trinityschoolnyc.org",
+        "justin.test1@trinityschoolnyc.org"
+    ];
+    const isAdmin = adminEmails.includes(email) || email.endsWith("@gmail.com") ||
+                    (email.endsWith("@trinityschoolnyc.org") && !/\d/.test(email.split('@')[0]));
+
+    try {
+        const user = await User.findOrCreate({ email, isAdmin });
+        return done(null, user);
+    } catch (err) {
+        return done(err);
+    }
 }));
 
 passport.serializeUser((user, done) => {
@@ -42,7 +55,7 @@ router.get('/auth/google',
 router.get('/auth/google/callback',
     passport.authenticate('google', { failureRedirect: '/' }),
     (req, res) => {
-        res.redirect('/');
+        res.redirect('/calendar');
     }
 );
 
@@ -52,4 +65,3 @@ router.get('/logout', (req, res) => {
 });
 
 module.exports = router;
-    

@@ -42,7 +42,7 @@
         <ul>
             <% slotRequests.forEach(function(request) { %>
                 <li>
-                    Week: <%= request.week %>, Day: <%= request.day %>, Time: <%= request.time %>, User: <%= request.user %>, Status: <%= request.status %>
+                    Week: <%= request.week %>, Day: <%= request.day %>, Time: <%= request.time %>, User: <%= user.email %>, Status: <%= request.status %>
                     <% if (request.status === 'requested') { %>
                         <button onclick="updateRequest('<%= request.id %>', 'accept')">Accept</button>
                         <button onclick="updateRequest('<%= request.id %>', 'deny')">Deny</button>

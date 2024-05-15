@@ -1,16 +1,12 @@
 const sqlite3 = require('sqlite3').verbose();
 const db = new sqlite3.Database(':memory:');
 
-
 db.serialize(() => {
-    db.run("CREATE TABLE users (id INTEGER PRIMARY KEY, name TEXT, role TEXT)");
+    db.run("CREATE TABLE users (id INTEGER PRIMARY KEY, email TEXT, isAdmin INTEGER)");
     db.run("CREATE TABLE slot_requests (id INTEGER PRIMARY KEY, week TEXT, day TEXT, time TEXT, user TEXT, status TEXT)");
     db.run("CREATE TABLE wellness_requests (id INTEGER PRIMARY KEY, name TEXT, date TEXT)");
     db.run("CREATE TABLE menu_options (id INTEGER PRIMARY KEY, week TEXT, name TEXT, calories INTEGER, protein TEXT, carbs TEXT, fat TEXT)");
     db.run("CREATE TABLE weekly_calendar (id INTEGER PRIMARY KEY, week TEXT, day TEXT, time TEXT, status TEXT)");
-    db.run("INSERT INTO users (name, role) VALUES ('Manas Ramesh', 'Admin')");
-    db.run("INSERT INTO wellness_requests (name, date) VALUES ('Thierry Lawrence', '2024-03-12')");
-    db.run("INSERT INTO wellness_requests (name, date) VALUES ('Robbie Levine', '2024-03-11')");
 
     const times = ['8:55 - 9:45', '9:45 - 10:40', '10:40 - 11:15', '11:15 - 12:05', '12:05 - 1:00', '1:00 - 1:40', '1:40 - 2:35', '2:35 - 3:25'];
     const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
@@ -23,7 +19,6 @@ db.serialize(() => {
     });
 
     const menuOptions = [
-        // High Protein
         { week: 'February 26th - March 1st', name: 'Grilled Chicken Salad', calories: 350, protein: '40g', carbs: '10g', fat: '15g' },
         { week: 'February 26th - March 1st', name: 'Beef Steak', calories: 500, protein: '55g', carbs: '0g', fat: '30g' },
         { week: 'February 26th - March 1st', name: 'Tuna Salad', calories: 300, protein: '35g', carbs: '5g', fat: '20g' },

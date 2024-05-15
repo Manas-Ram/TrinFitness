@@ -3,125 +3,99 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Teacher Dashboard</title>
-    <link rel="stylesheet" href="teacherdashboard.css">
-    <style>
-        body {
-            display: flex;
-            justify-content: space-between;
-            padding: 20px;
-        }
-        .requests {
-            width: 48%;
-            box-shadow: 0 0 5px rgba(0,0,0,0.1);
-            margin-right: 2%;
-        }
-        .request {
-            border-bottom: 1px solid #eee;
-            padding: 10px;
-        }
-        .calendar {
-            display: flex;
-            flex-direction: column;
-            width: 48%;
-            box-shadow: 0 0 5px rgba(0,0,0,0.1);
-            padding: 10px;
-        }
-        .day {
-            margin-bottom: 10px;
-        }
-        .time-slots {
-            display: flex;
-            flex-direction: column;
-        }
-        .time-slot {
-            padding: 5px;
-            border-top: 1px solid #f0f0f0;
-        }
-    </style>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="/">Home</a>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <a class="navbar-brand" href="/">
-          </a>
-          <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-              <a class="nav-link" href="/">Home</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href='/adminstatus'> Admin Status</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" id = "calendar"href='/calendar'> Calendar</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" id = "demos"href='/demos'> Demos</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" id = "lunchplan"href='/lunchplan'> lunchplan </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" id = "machine"href='/machine/bench-press'> Machine </a>
-              </li>
-    
-              <li class="nav-item">
-                <a class="nav-link" id = "menu"href='/menu'>Menu</a>
-              </li>
-    
-              <li class="nav-item">
-                <a class="nav-link" id = ""href='/teacherdashboard'> Teacher Dashboard</a>
-              </li>
-          </ul>
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href='/adminstatus'>Admin Status</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href='/calendar'>Calendar</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href='/demos'>Demos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href='/lunchplan'>Lunchplan</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href='/machine/bench-press'>Machine</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href='/menu'>Menu</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href='/teacherdashboard'>Teacher Dashboard</a>
+                </li>
+            </ul>
         </div>
-      </nav>
-
-      <div class="requests">
-        <h2>Pending Requests</h2>
-        <% slotRequests.forEach(function(request, index) { %>
-            <div>
-                <%= request.user %> requested for <%= request.day %> at <%= request.time %>
-                <% if (request.status === 'pending') { %>
-                    <button onclick="handleRequest(<%= index %>, 'accept')">Accept</button>
-                    <button onclick="handleRequest(<%= index %>, 'deny')">Deny</button>
-                <% } else { %>
-                    Request <%= request.status %>.
-                <% } %>
-            </div>
-        <% }); %>
-    </div>
-
-    <div class="calendar">
-        <% weeklyCalendar.forEach(function(week) { %>
-            <h2><%= week.name %></h2> 
-            <% week.days.forEach(function(day) { %>
-                <h3><%= day.name %></h3> 
-                <% day.timeSlots.forEach(function(slot) { %>
-                    <div><%= slot.time %>: <%= slot.status %></div> 
-                <% }); %>
+    </nav>
+    <div class="container">
+        <h1>Teacher Dashboard</h1>
+        <h2>Slot Requests</h2>
+        <ul>
+            <% slotRequests.forEach(function(request) { %>
+                <li>
+                    Week: <%= request.week %>, Day: <%= request.day %>, Time: <%= request.time %>, User: <%= request.user %>, Status: <%= request.status %>
+                    <% if (request.status === 'requested') { %>
+                        <button onclick="updateRequest('<%= request.id %>', 'accept')">Accept</button>
+                        <button onclick="updateRequest('<%= request.id %>', 'deny')">Deny</button>
+                    <% } %>
+                </li>
             <% }); %>
+        </ul>
+        <h2>Weekly Calendar</h2>
+        <% weeklyCalendar.forEach(function(week) { %>
+            <h3><%= week.name %></h3>
+            <table class="calendar">
+                <tr>
+                    <th>Time</th>
+                    <% week.days.forEach(function(day) { %>
+                        <th><%= day.name %></th>
+                    <% }); %>
+                </tr>
+                <% week.days[0].timeSlots.forEach(function(slot, index) { %>
+                    <tr>
+                        <td><%= slot.time %></td>
+                        <% week.days.forEach(function(day) { %>
+                            <td class="<%= day.timeSlots[index].status !== 'Open' ? 'request-slot' : 'time-slot' %>">
+                                <%= day.timeSlots[index].status || 'Open' %>
+                            </td>
+                        <% }); %>
+                    </tr>
+                <% }); %>
+            </table>
         <% }); %>
     </div>
     <script>
-        function handleRequest(index, action) {
-            fetch('/handle-request', {
+        function updateRequest(id, action) {
+            const url = action === 'accept' ? '/accept-request' : '/deny-request';
+            console.log(`Sending ${action} request for ID: ${id}`);  // Add this line to log the action
+            fetch(url, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ requestId: index, action: action })
+                body: JSON.stringify({ id })
             }).then(response => response.json())
               .then(data => {
                   if (data.success) {
-                      alert(data.message);
-                      location.reload();  
+                      alert(`Slot request ${action}ed successfully`);
+                      location.reload();  // Reload the page to update the button state
                   } else {
-                      alert(data.message);
+                      alert(`Failed to ${action} slot request`);
+                      console.error(`Error: ${data.message}`);  // Add this line to log the error
                   }
+              }).catch(error => {
+                  console.error(`Fetch error: ${error}`);  // Add this line to log fetch errors
               });
         }
-        </script>
-    
-
+    </script>
 </body>
 </html>

@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const multer = require('multer');
 const db = require('./models/database');
@@ -24,17 +25,17 @@ const machineRoutes = require('./routes/machineRoutes');
 const menuRoutes = require('./routes/menuRoutes');
 const authRoutes = require('./controllers/auth');
 app.use(authRoutes);
-
-app.use(adminRoutes);
+const ensureAuthenticated = require('./middlewares/authMiddleware');
+app.use(adminRoutes,ensureAuthenticated);
 app.use(calendarRoutes);
 app.use(lunchplanRoutes);
 app.use(slotRequestRoutes);
-app.use(teacherDashboardRoutes);
+app.use(teacherDashboardRoutes,ensureAuthenticated);
 app.use(userRoutes);
 app.use(homeRoutes);
 app.use(demosRoutes);
 app.use(machineRoutes);
-app.use(menuRoutes);
+app.use(menuRoutes,ensureAuthenticated);
 
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);

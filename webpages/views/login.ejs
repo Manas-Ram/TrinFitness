@@ -1,32 +1,19 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <link rel="stylesheet" href="menu.css">
-    <title>TrinFitness Login</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 </head>
-
 <body>
-    <h1>Welcome to TrinFitness</h1>
-    <% if (errorMessage) { %>
-        <div class="error"><%= errorMessage %></div>
-    <% } %>
-    <!-- <div class="form">
-        <form action="/login" method="post">
-            <div class="subform">
-                <label for="username">Username:</label>
-                <input id="username_input" type="text" name="username" value="<%= typeof username !== 'undefined' ? username : '' %>" /> <br />
-            </div>
-            <br>
-            <div class="subform">
-                <label for="password">Password:</label>
-                <input id="password_input" type="password" name="password" /> <br />
-            </div>
-            <button type="submit">Login</button>
-        </form>
-    </div> -->
-    <body>
-        <a href="/auth/google">Login with Google</a>
-    </body>
-    <h2 id="mid"><a href="menu">Lunch Menu</a></h2>
-
+    <div class="container">
+        <h1>Welcome to TrinFitness</h1>
+        <% if (errorMessage) { %>
+            <div class="alert alert-danger"><%= errorMessage %></div>
+        <% } %>
+        <a href="/auth/google" class="btn btn-primary">Login with Google</a>
+        <h2 id="mid"><a href="menu">Lunch Menu</a></h2>
+    </div>
 </body>
 </html>

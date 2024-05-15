@@ -17,7 +17,6 @@ exports.getLogin = (req, res) => {
 
 exports.postLogin = (req, res) => {
     const { username, password } = req.body;
-    // You should replace this with your actual authentication logic
     const success = true;
     if (success) {
         res.redirect('/calendar');
@@ -30,5 +29,5 @@ exports.getProfile = (req, res) => {
     if (!req.isAuthenticated()) {
         return res.redirect('/auth/google');
     }
-    res.render('profile', { user: req.user });
+    res.render('calendar', { user: req.user });
 };

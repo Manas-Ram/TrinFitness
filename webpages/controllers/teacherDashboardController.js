@@ -1,6 +1,6 @@
 const SlotRequest = require('../models/SlotRequest');
 const WeeklyCalendar = require('../models/WeeklyCalendar');
-
+const User = require('../models/User')
 exports.getTeacherDashboard = (req, res) => {
     SlotRequest.getAll((err, slotRequests) => {
         if (err) return res.status(500).send(err);
@@ -26,7 +26,7 @@ exports.getTeacherDashboard = (req, res) => {
                 }))
             }));
 
-            res.render('teacherdashboard', { slotRequests, weeklyCalendar: calendarArray });
+            res.render('teacherdashboard', { slotRequests, weeklyCalendar: calendarArray, user: req.user });
         });
     });
 };

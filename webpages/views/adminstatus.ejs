@@ -67,20 +67,26 @@
     <h1>Admin Status Page</h1>
     <div class="container">
         <div class="side" id="loggedInUser">
-            <div class="header">Logged-in User</div>
-            <p>Name: <%= loggedInUser.name %></p>
-            <p>Role: <%= loggedInUser.role %></p>
+          <h1>Welcome</h1>
+          <h4><%= loggedInUser.email %></h4>
+        <h2>Admin Status</h2>
+        <% if (loggedInUser) { %>
+            <p>Name: <%= loggedInUser.email %></p>
+            <p>Role: Admin</p>
+        <% } else { %>
+            <p>No admin user found.</p>
+        <% } %>
         </div>
 
         <!-- Wellness Center Check Requests Section -->
-        <div class="side" id="wellnessRequests">
+        <!-- <div class="side" id="wellnessRequests">
             <div class="header">Wellness Center Check Requests</div>
             <ul>
                 <% wellnessRequests.forEach(function(request) { %>
                     <li><%= request.name %> requested on <%= request.date %></li>
                 <% }); %>
             </ul>
-        </div>
+        </div> -->
         <div>
           <h2>Review Requests</h2>
           <% slotRequests.forEach(function(request, index) { %>

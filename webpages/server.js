@@ -22,6 +22,8 @@ const homeRoutes = require('./routes/homeRoutes');
 const demosRoutes = require('./routes/demosRoutes');
 const machineRoutes = require('./routes/machineRoutes');
 const menuRoutes = require('./routes/menuRoutes');
+const authRoutes = require('./controllers/auth');
+app.use(authRoutes);
 
 app.use(adminRoutes);
 app.use(calendarRoutes);

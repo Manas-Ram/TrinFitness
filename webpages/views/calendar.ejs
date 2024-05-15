@@ -134,12 +134,12 @@
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ week, day, time, user: 'YourUsername' })  // Replace 'YourUsername' with dynamic session username if available
+                body: JSON.stringify({ week, day, time, user: 'YourUsername' })  
             }).then(response => response.json())
               .then(data => {
                   if (data.success) {
                       alert(data.message);
-                      location.reload();  // Reload the page to update the button state
+                      location.reload();  
                   } else {
                       alert(data.message);
                   }

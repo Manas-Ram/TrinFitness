@@ -1,7 +1,7 @@
 const User = require('../models/User');
 const WellnessRequest = require('../models/WellnessRequest');
 const WeeklyCalendar = require('../models/WeeklyCalendar');
-const SlotRequest = require('../models/SlotRequest');  // Import SlotRequest model
+const SlotRequest = require('../models/SlotRequest'); 
 
 exports.getAdminStatus = (req, res) => {
     User.getAdmin((err, loggedInUser) => {
@@ -19,7 +19,6 @@ exports.getAdminStatus = (req, res) => {
                     return acc;
                 }, {});
 
-                // Fetch slot requests
                 SlotRequest.getAll((err, slotRequests) => {
                     if (err) return res.status(500).send(err);
 

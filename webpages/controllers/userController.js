@@ -4,7 +4,7 @@ exports.getLogin = (req, res) => {
 
 exports.postLogin = (req, res) => {
     const { username, password } = req.body;
-    const success = true; // Authentication logic goes here
+    const success = true;
     if (success) {
         res.redirect('/calendar');
     } else {

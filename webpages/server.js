@@ -1,7 +1,8 @@
 const express = require('express');
 const multer = require('multer');
 const db = require('./models/database');
-
+const fs = require('fs');
+const path = require('path');
 const app = express();
 const port = 3000;
 
@@ -9,8 +10,8 @@ app.set('view engine', 'ejs');
 app.use(express.static('public'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); 
 
-// Routes
 const adminRoutes = require('./routes/adminRoutes');
 const calendarRoutes = require('./routes/calendarRoutes');
 const lunchplanRoutes = require('./routes/lunchplanRoutes');
@@ -24,7 +25,7 @@ const menuRoutes = require('./routes/menuRoutes');
 
 app.use(adminRoutes);
 app.use(calendarRoutes);
-app.use(lunchplanRoutes); // Ensure this line is included
+app.use(lunchplanRoutes);
 app.use(slotRequestRoutes);
 app.use(teacherDashboardRoutes);
 app.use(userRoutes);

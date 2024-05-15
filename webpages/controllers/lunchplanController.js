@@ -20,7 +20,7 @@ exports.getLunchplan = (req, res) => {
                     { id: 'vegan', name: 'vegan', value: 'Vegan', label: 'Vegan' },
                     { id: 'vegetarian', name: 'vegetarian', value: 'Vegetarian', label: 'Vegetarian' }
                 ],
-                suggestions: [] // No suggestions initially
+                suggestions: [] 
             });
         });
     });

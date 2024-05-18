@@ -22,25 +22,9 @@ passport.use(new GoogleStrategy({
     clientSecret: KEYS.googleClientSecret,
     callbackURL: 'http://localhost:3000/auth/google/callback'
 },
-async function (accessToken, refreshToken, profile, done) {
-    const email = profile.emails[0].value;
-    const adminEmails = [
-        "manas.ramesh24@trinityschoolnyc.org",
-        "robert.levine24@trinityschoolnyc.org",
-        "thierry.lawrence24@trinityschoolnyc.org",
-        "justin.test1@trinityschoolnyc.org"
-    ];
-    const isAdmin = adminEmails.includes(email) || email.endsWith("@gmail.com") ||
-                    (email.endsWith("@trinityschoolnyc.org") && !/\d/.test(email.split('@')[0]));
-
-    User.findOrCreate({ email, role: 'User', isAdmin }, (err, user) => {
-        Activity.logActivity(user.email, 'login', (err)=> {
-            if (err) {
-                return done(err);
-            }
-            return done(null, user);
-        })
-    });
+function (accessToken, refreshToken, profile, done) {
+    userProfile = profile;
+    return done(null, userProfile);
 }));
 
 passport.serializeUser((user, done) => {
@@ -58,10 +42,7 @@ router.get('/auth/google',
 router.get('/auth/google/callback',
     passport.authenticate('google', { failureRedirect: '/' }),
     (req, res) => {
-        Activity.logActivity(req.user.email, 'login', (err) => {
-            if (err) console.error('Failed to log activity:', err);
-            res.redirect('/calendar');
-        });
+        res.redirect('/');
     }
 );
 
@@ -71,3 +52,4 @@ router.get('/logout', (req, res) => {
 });
 
 module.exports = router;
+    

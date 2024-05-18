@@ -25,20 +25,7 @@ class User {
     }
 
     static getAdmin(callback) {
-        db.all("SELECT * FROM users WHERE isAdmin = 1", callback);
-    }
-
-    static getLoginData(callback) {
-        db.all("SELECT email, MIN(timestamp) as firstLogin, COUNT(*) as loginCount FROM activities WHERE activity_type = 'login' GROUP BY email", (err, rows) => {
-            if (err) {
-                return callback(err);
-            }
-            const totalLogins = rows.reduce((acc, row) => acc + row.loginCount, 0);
-            callback(null, { totalLogins, userLogins: rows });
-        });
-    }
-    static getAllUsers(callback) {
-        db.all("SELECT * FROM users", callback);
+        db.get("SELECT * FROM users WHERE role = 'Admin'", callback);
     }
 }
 

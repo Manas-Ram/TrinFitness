@@ -14,7 +14,7 @@ app.use(express.static('public'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); 
-
+app.use('/images', express.static(path.join(__dirname, 'images'))); 
 const adminRoutes = require('./routes/adminRoutes');
 const { ensureAuthenticated, ensureAdmin } = require('./middlewares/authMiddleware');
 const calendarRoutes = require('./routes/calendarRoutes');

@@ -6,32 +6,78 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Teacher Dashboard</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <style>
+        .container {
+            margin-top: 20px;
+        }
+        h1, h2 {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .calendar {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        .calendar th, .calendar td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        .calendar th {
+            background-color: #f8f9fa;
+        }
+        .calendar td {
+            vertical-align: middle;
+        }
+        .request-slot.requested {
+            background-color: #ffa227;
+            color: #72671c;
+        }
+        .request-slot.accepted {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .request-slot.denied {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .time-slot {
+            background-color: #cce5ff;
+            color: #004085;
+        }
+        .btn-group {
+            margin-top: 10px;
+        }
+    </style>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <a class="navbar-brand" href="/">Home</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href='/adminstatus'>Admin Status</a>
+                    <a class="nav-link" href="/adminstatus">Admin Status</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href='/calendar'>Calendar</a>
+                    <a class="nav-link" href="/calendar">Calendar</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href='/demos'>Demos</a>
+                    <a class="nav-link" href="/demos">Demos</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href='/lunchplan'>Lunchplan</a>
+                    <a class="nav-link" href="/lunchplan">Lunchplan</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href='/machine/bench-press'>Machine</a>
+                    <a class="nav-link" href="/machine/bench-press">Machine</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href='/menu'>Menu</a>
+                    <a class="nav-link" href="/menu">Menu</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href='/teacherdashboard'>Teacher Dashboard</a>
+                    <a class="nav-link" href="/teacherdashboard">Teacher Dashboard</a>
                 </li>
             </ul>
         </div>
@@ -39,37 +85,43 @@
     <div class="container">
         <h1>Teacher Dashboard</h1>
         <h2>Slot Requests</h2>
-        <ul>
+        <ul class="list-group">
             <% slotRequests.forEach(function(request) { %>
-                <li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
                     Week: <%= request.week %>, Day: <%= request.day %>, Time: <%= request.time %>, User: <%= user.email %>, Status: <%= request.status %>
                     <% if (request.status === 'requested') { %>
-                        <button onclick="updateRequest('<%= request.id %>', 'accept')">Accept</button>
-                        <button onclick="updateRequest('<%= request.id %>', 'deny')">Deny</button>
+                        <div class="btn-group">
+                            <button class="btn btn-success btn-sm" onclick="updateRequest('<%= request.id %>', 'accept')">Accept</button>
+                            <button class="btn btn-danger btn-sm" onclick="updateRequest('<%= request.id %>', 'deny')">Deny</button>
+                        </div>
                     <% } %>
                 </li>
             <% }); %>
         </ul>
         <h2>Weekly Calendar</h2>
         <% weeklyCalendar.forEach(function(week) { %>
-            <h3><%= week.name %></h3>
-            <table class="calendar">
-                <tr>
-                    <th>Time</th>
-                    <% week.days.forEach(function(day) { %>
-                        <th><%= day.name %></th>
-                    <% }); %>
-                </tr>
-                <% week.days[0].timeSlots.forEach(function(slot, index) { %>
+            <h3 class="text-center"><%= week.name %></h3>
+            <table class="table table-bordered calendar">
+                <thead class="thead-light">
                     <tr>
-                        <td><%= slot.time %></td>
+                        <th>Time</th>
                         <% week.days.forEach(function(day) { %>
-                            <td class="<%= day.timeSlots[index].status !== 'Open' ? 'request-slot' : 'time-slot' %>">
-                                <%= day.timeSlots[index].status || 'Open' %>
-                            </td>
+                            <th><%= day.name %></th>
                         <% }); %>
                     </tr>
-                <% }); %>
+                </thead>
+                <tbody>
+                    <% week.days[0].timeSlots.forEach(function(slot, index) { %>
+                        <tr>
+                            <td><%= slot.time %></td>
+                            <% week.days.forEach(function(day) { %>
+                                <td class="<%= day.timeSlots[index].status === 'requested' ? 'request-slot requested' : day.timeSlots[index].status === 'accepted' ? 'request-slot accepted' : day.timeSlots[index].status === 'denied' ? 'request-slot denied' : 'time-slot' %>">
+                                    <%= day.timeSlots[index].status || 'Open' %>
+                                </td>
+                            <% }); %>
+                        </tr>
+                    <% }); %>
+                </tbody>
             </table>
         <% }); %>
     </div>

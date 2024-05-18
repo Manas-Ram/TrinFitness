@@ -3,124 +3,129 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Analytics Dashboard</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
-        .container {
-            display: flex;
-            justify-content: space-between;
-            padding: 20px;
-        }
-        .side {
-            width: 48%;
-            padding: 20px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-        .header {
-            font-size: 24px;
-            margin-bottom: 20px;
-        }
-    </style>
+    <title>Admin Status</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-
-
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="/">Home</a>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <a class="navbar-brand" href="/">
-          </a>
-          <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-              <a class="nav-link" href="/">Home</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href='/adminstatus'> Admin Status</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" id = "calendar"href='/calendar'> Calendar</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" id = "demos"href='/demos'> Demos</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" id = "lunchplan"href='/lunchplan'> lunchplan </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" id = "machine"href='/machine/bench-press'> Machine </a>
-              </li>
-    
-              <li class="nav-item">
-                <a class="nav-link" id = "menu"href='/menu'>Menu</a>
-              </li>
-    
-              <li class="nav-item">
-                <a class="nav-link" id = ""href='/teacherdashboard'> Teacher Dashboard</a>
-              </li>
-          </ul>
-        </div>
-      </nav>
-
-    <h1>Admin Status Page</h1>
-    <div class="container">
-        <div class="side" id="loggedInUser">
-          <h1>Welcome</h1>
-          <h4><%= loggedInUser.email %></h4>
-        <h2>Admin Status</h2>
-        <% if (loggedInUser) { %>
-            <p>Name: <%= loggedInUser.email %></p>
-            <p>Role: Admin</p>
-        <% } else { %>
-            <p>No admin user found.</p>
-        <% } %>
-        </div>
-
-        <!-- Wellness Center Check Requests Section -->
-        <!-- <div class="side" id="wellnessRequests">
-            <div class="header">Wellness Center Check Requests</div>
-            <ul>
-                <% wellnessRequests.forEach(function(request) { %>
-                    <li><%= request.name %> requested on <%= request.date %></li>
-                <% }); %>
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href='/adminstatus'>Admin Status</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href='/calendar'>Calendar</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href='/demos'>Demos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href='/lunchplan'>Lunchplan</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href='/machine/bench-press'>Machine</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href='/menu'>Menu</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href='/teacherdashboard'>Teacher Dashboard</a>
+                </li>
             </ul>
-        </div> -->
-        <div>
-          <h2>Review Requests</h2>
-          <% slotRequests.forEach(function(request, index) { %>
-              <div>
-                  <%= request.user %> requested for <%= request.day %> at <%= request.time %>
-                  <% if (request.status === 'pending') { %>
-                      <button onclick="handleRequest(<%= index %>, 'accept')">Yes</button>
-                      <button onclick="handleRequest(<%= index %>, 'deny')">No</button>
-                  <% } else { %>
-                      Request <%= request.status %>.
-                  <% } %>
-              </div>
-          <% }) %>
-      </div>
+        </div>
+    </nav>
+    <div class="container mt-5">
+        <h1>Admin Status</h1>
+        
+        <h2>User Activities</h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>User Email</th>
+                    <th>Activity Type</th>
+                    <th>Timestamp</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% activities.forEach(activity => { %>
+                    <tr>
+                        <td><%= activity.user_email %></td>
+                        <td><%= activity.activity_type %></td>
+                        <td><%= activity.timestamp %></td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+
+        <h2>Slot Requests</h2>
+        <ul>
+            <% slotRequests.forEach(request => { %>
+                <li>
+                    Week: <%= request.week %>, Day: <%= request.day %>, Time: <%= request.time %>, User: <%= user.email %>, Status: <%= request.status %>
+                    <% if (request.status === 'requested') { %>
+                        <button onclick="updateRequest('<%= request.id %>', 'accept')">Accept</button>
+                        <button onclick="updateRequest('<%= request.id %>', 'deny')">Deny</button>
+                    <% } %>
+                </li>
+            <% }); %>
+        </ul>
+
+        <h2>Daily Login Counts</h2>
+        <canvas id="loginChart"></canvas>
     </div>
-    <canvas id="myChart" style="width:100%;max-width:700px"></canvas>
     <script>
-      function handleRequest(index, action) {
-          fetch('/handle-request', {
-              method: 'POST',
-              headers: {
-                  'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({ requestId: index, action: action })
-          }).then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert(data.message);
-                    location.reload();  
-                } else {
-                    alert(data.message);
+        function updateRequest(id, action) {
+            const url = action === 'accept' ? '/accept-request' : '/deny-request';
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ id })
+            }).then(response => response.json())
+              .then(data => {
+                  if (data.success) {
+                      alert(`Slot request ${action}ed successfully`);
+                      location.reload();
+                  } else {
+                      alert(`Failed to ${action} slot request`);
+                      console.error(`Error: ${data.message}`); 
+                  }
+              }).catch(error => {
+                  console.error(`Fetch error: ${error}`);  
+              });
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctx = document.getElementById('loginChart').getContext('2d');
+            const loginData = <%- JSON.stringify(loginData) %>;
+
+            const labels = loginData.map(entry => entry.day);
+            const counts = loginData.map(entry => entry.count);
+
+            new Chart(ctx, {
+                type: 'bar', // Changed from 'line' to 'bar'
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Logins per Day',
+                        data: counts,
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
                 }
             });
-      }
-      </script>
+        });
+    </script>
 </body>
 </html>

@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const MenuOption = require('../models/MenuOption'); 
+const Activity = require('../models/Activity')
 
 exports.getMenu = (req, res) => {
     MenuOption.getDistinctWeeks((err, weeks) => {
@@ -11,7 +12,10 @@ exports.getMenu = (req, res) => {
         MenuOption.getAll((err, menuOptions) => {
             if (err) return res.status(500).send(err);
 
-            res.render('menu', { weeks: weekNames, menuOptions, uploadedFile: null, fileType: null });
+            Activity.logActivity(req.user.email, 'view_menu', (err) => {
+                if (err) console.error('Failed to log activity:', err);
+                res.render('menu', { weeks: weekNames, menuOptions, uploadedFile: null, fileType: null });
+            });
         });
     });
 };

@@ -4,6 +4,7 @@ const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const session = require('express-session');
 const KEYS = require('../config/keys');
+const Activity = require('../models/Activity');
 const User = require('../models/User');
 
 router.use(session({
@@ -32,12 +33,14 @@ async function (accessToken, refreshToken, profile, done) {
     const isAdmin = adminEmails.includes(email) || email.endsWith("@gmail.com") ||
                     (email.endsWith("@trinityschoolnyc.org") && !/\d/.test(email.split('@')[0]));
 
-    try {
-        const user = await User.findOrCreate({ email, isAdmin });
-        return done(null, user);
-    } catch (err) {
-        return done(err);
-    }
+    User.findOrCreate({ email, role: 'User', isAdmin }, (err, user) => {
+        Activity.logActivity(user.email, 'login', (err)=> {
+            if (err) {
+                return done(err);
+            }
+            return done(null, user);
+        })
+    });
 }));
 
 passport.serializeUser((user, done) => {
@@ -55,7 +58,10 @@ router.get('/auth/google',
 router.get('/auth/google/callback',
     passport.authenticate('google', { failureRedirect: '/' }),
     (req, res) => {
-        res.redirect('/calendar');
+        Activity.logActivity(req.user.email, 'login', (err) => {
+            if (err) console.error('Failed to log activity:', err);
+            res.redirect('/calendar');
+        });
     }
 );
 

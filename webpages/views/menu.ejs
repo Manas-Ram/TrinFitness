@@ -3,15 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Menu</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        .menu-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .menu-table th, .menu-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        .menu-table th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .menu-item {
+            cursor: pointer;
+            background-color: #f9f9f9;
+            transition: background-color 0.3s;
+        }
+        .menu-item:hover {
+            background-color: #f1f1f1;
+        }
+        .indicator {
+            font-size: 12px;
+            margin-left: 5px;
+        }
+        .vegan {
+            color: green;
+        }
+        .vegetarian {
+            color: orange;
+        }
+        .popup {
+            display: none;
+            position: absolute;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            padding: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            z-index: 1000;
+        }
+    </style>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="/">Home</a>
+        <a class="navbar-brand" href="/">TrinFitness</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/">Home</a>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link" href='/adminstatus'>Admin Status</a>
                 </li>
@@ -22,12 +71,9 @@
                     <a class="nav-link" href='/demos'>Demos</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href='/lunchplan'>Lunchplan</a>
+                    <a class="nav-link" href='/lunchplan'>Lunch Plan</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href='/machine/bench-press'>Machine</a>
-                </li>
-                <li class="nav-item">
+
                     <a class="nav-link" href='/menu'>Menu</a>
                 </li>
                 <li class="nav-item">
@@ -36,45 +82,109 @@
             </ul>
         </div>
     </nav>
-    <div class="container">
-        
-        <h1>Menu</h1>
-        
-        <h2>Upload New Menu</h2>
-        <form action="/menu/upload" method="post" enctype="multipart/form-data">
-            <div class="form-group">
-                <label for="menuFile">Upload file</label>
-                <input type="file" class="form-control-file" id="menuFile" name="menuFile" required>
-            </div>
-            <button type="submit" class="btn btn-primary">Upload</button>
-        </form>
-
-        <% if (uploadedFile && fileType === 'text') { %>
-            <h2>Uploaded File Content</h2>
-            <pre><%= uploadedFile %></pre>
-        <% } else if (uploadedFile && fileType === 'image') { %>
-            <h2>Uploaded Image</h2>
-            <img src="/uploads/<%= uploadedFile %>" alt="Uploaded Image" style="max-width: 100%; height: auto;">
-        <% } %>
-
-        <div class="dropdown">
-            <button class="dropbtn">Select Week</button>
-            <div class="dropdown-content">
-                <% weeks.forEach(function(week) { %>
-                    <a href="#"><%= week %></a>
-                <% }); %>
-            </div>
+    <h1>Weekly Menu</h1>
+    <!-- <h2>Upload New Menu</h2>
+    <form action="/upload-menu" method="post" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="menuFile">Upload file</label>
+            <input type="file" class="form-control-file" id="menuFile" name="menuFile" required>
         </div>
-        <% weeks.forEach(function(week) { %>
-            <h2><%= week %></h2>
-            <ul>
-                <% menuOptions.filter(option => option.week === week).forEach(function(option) { %>
-                    <li>
-                        <%= option.name %> - Calories: <%= option.calories %>, Protein: <%= option.protein %>, Carbs: <%= option.carbs %>, Fat: <%= option.fat %>
-                    </li>
-                <% }); %>
-            </ul>
-        <% }); %>
+        <button type="submit" class="btn btn-primary">Upload</button>
+    </form>
+
+     -->
+    <table class="menu-table">
+        <thead>
+            <tr>
+                <th>Monday</th>
+                <th>Tuesday</th>
+                <th>Wednesday</th>
+                <th>Thursday</th>
+                <th>Friday</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- <% if (uploadedFile && fileType === 'text') { %>
+                <h2>Uploaded File Content</h2>
+                <pre><%= uploadedFile %></pre>
+            <% } else if (uploadedFile && fileType === 'image') { %>
+                <h2>Uploaded Image</h2>
+                <img src="/uploads/<%= uploadedFile %>" alt="Uploaded Image" style="max-width: 100%; height: auto;">
+            <% } %> -->
+            <% for (let i = 0; i < 3; i++) { %>
+                <tr>
+                    <% ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'].forEach(day => { %>
+                        <td>
+                            <% menuOptions.filter(option => option.day === day).forEach(option => { %>
+                                <div class="menu-item" data-name="<%= option.name %>" data-calories="<%= option.calories %>" data-protein="<%= option.protein %>" data-carbs="<%= option.carbs %>" data-fat="<%= option.fat %>">
+                                    <%= option.name %>
+                                    <% if (option.dietary.includes('vegan')) { %>
+                                        <span class="indicator vegan">V</span>
+                                    <% } %>
+                                    <% if (option.dietary.includes('vegetarian')) { %>
+                                        <span class="indicator vegetarian">Veg</span>
+                                    <% } %>
+                                </div>
+                            <% }) %>
+                        </td>
+                    <% }) %>
+                </tr>
+            <% } %>
+        </tbody>
+    </table>
+    <div class="popup" id="popup">
+        <h2 id="popup-title"></h2>
+        <p>Calories: <span id="popup-calories"></span>g</p>
+        <p>Protein: <span id="popup-protein"></span>g</p>
+        <p>Carbs: <span id="popup-carbs"></span>g</p>
+        <p>Fat: <span id="popup-fat"></span>g</p>
+        <button onclick="closePopup()">Close</button>
     </div>
+    <script>
+        $(document).ready(function() {
+            $('.menu-item').click(function() {
+                var name = $(this).data('name');
+                var calories = $(this).data('calories');
+                var protein = $(this).data('protein');
+                var carbs = $(this).data('carbs');
+                var fat = $(this).data('fat');
+
+                $('#popup-title').text(name);
+                $('#popup-calories').text(calories);
+                $('#popup-protein').text(protein);
+                $('#popup-carbs').text(carbs);
+                $('#popup-fat').text(fat);
+
+                $('#popup').css({
+                    top: event.clientY,
+                    left: event.clientX
+                }).fadeIn();
+            });
+        });
+
+        function closePopup() {
+            $('#popup').fadeOut();
+        }
+
+        $('#file-upload').change(function() {
+            var formData = new FormData();
+            formData.append('file', this.files[0]);
+
+            $.ajax({
+                url: '/upload-menu',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(data) {
+                    location.reload();
+                },
+                error: function(err) {
+                    alert('File upload failed.');
+                }
+            });
+        });
+    </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

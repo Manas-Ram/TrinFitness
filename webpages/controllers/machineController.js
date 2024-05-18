@@ -9,3 +9,17 @@ exports.getBenchPress = (req, res) => {
         ]
     });
 };
+exports.getSquatRack = (req, res) => {
+    res.render('machine', {
+        exerciseName: 'Squat Rack',
+        demonstratorName: 'Your Name',
+        descriptionTips: ['Tip 1', 'Tip 2', 'Tip 3']
+    });
+};
+exports.getDeadLift = (req, res) => {
+    res.render('machine', {
+        exerciseName: 'Deadlift',
+        demonstratorName: 'Your Name',
+        descriptionTips: ['Tip 1', 'Tip 2', 'Tip 3']
+    });
+};

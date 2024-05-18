@@ -3,78 +3,117 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <title>Lunch Plan</title>
-    <link rel="stylesheet" href="./lunchplan.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/styles/lunchplan.css">
+    <style>
+        .menu-container {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+        }
+        .menu-option {
+            background: #f9f9f9;
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: center;
+            position: relative;
+        }
+        .macros {
+            display: none;
+            background: #fff;
+            padding: 10px;
+            border: 1px solid #ddd;
+            position: absolute;
+            z-index: 10;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            margin: auto;
+        }
+        .menu-option:hover .macros {
+            display: block;
+        }
+        .weekly-macros {
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="/">TrinFitness</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <a class="navbar-brand" href="/">Home</a>
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
                     <a class="nav-link" href="/">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href='/adminstatus'> Admin Status</a>
+                    <a class="nav-link" href='/adminstatus'>Admin Status</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="calendar" href='/calendar'> Calendar</a>
+                    <a class="nav-link" href='/calendar'>Calendar</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="demos" href='/demos'> Demos</a>
+                    <a class="nav-link" href='/demos'>Demos</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="lunchplan" href='/lunchplan'> Lunchplan </a>
+                    <a class="nav-link" href='/lunchplan'>Lunch Plan</a>
+                </li>
+
+                    <a class="nav-link" href='/menu'>Menu</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="machine" href='/machine/bench-press'> Machine </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="menu" href='/menu'>Menu</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="" href='/teacherdashboard'> Teacher Dashboard</a>
+                    <a class="nav-link" href='/teacherdashboard'>Teacher Dashboard</a>
                 </li>
             </ul>
         </div>
     </nav>
-    <div class="container">
-        <h1>Create Your Custom Lunch Plan</h1>
-        <p>Choose your meal type and dietary restriction to generate a list of suitable lunch options.</p>
-        <p><strong>High Protein:</strong> Meals with at least 30g of protein.</p>
-        <p><strong>High Fat:</strong> Meals with at least 15g of fat.</p>
-        <form action="/lunchplan" method="post">
-            <div class="form-group">
-                <label for="mealType">Meal type:</label>
-                <select class="form-control" name="mealType" id="mealType">
-                    <option value="no_restriction">No Restriction</option>
-                    <option value="high_protein">High Protein</option>
-                    <option value="high_fat">High Fat</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="dietaryRestriction">Dietary Restriction:</label>
-                <select class="form-control" name="dietaryRestriction" id="dietaryRestriction">
-                    <option value="none">No Restriction</option>
-                    <option value="vegan">Vegan</option>
-                    <option value="vegetarian">Vegetarian</option>
-                </select>
-            </div>
-            <button type="submit" class="btn btn-primary">Generate</button>
-        </form>
-    
-        <% if (suggestions && suggestions.length > 0) { %>
-            <h2>Suggested Meals</h2>
-            <ul>
-                <% suggestions.forEach(function(item) { %>
-                    <li><%= item.name %> - Protein: <%= item.protein %>, Fat: <%= item.fat %>, Carbs: <%= item.carbs %>, Calories: <%= item.calories %></li>
+    <h1>Lunch Plan for the Week</h1>
+    <form action="/lunchplan" method="POST">
+        <label for="mealType">Meal Type:</label>
+        <select name="mealType" id="mealType">
+            <% mealTypes.forEach(type => { %>
+                <option value="<%= type.value %>"><%= type.display %></option>
+            <% }); %>
+        </select>
+
+        <label for="dietaryRestriction">Dietary Restriction:</label>
+        <select name="dietaryRestriction" id="dietaryRestriction">
+            <% dietaryRestrictions.forEach(restriction => { %>
+                <option value="<%= restriction.value %>"><%= restriction.label %></option>
+            <% }); %>
+        </select>
+        <button type="submit">Apply Filters</button>
+    </form>
+
+    <div class="menu-container">
+        <% const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']; %>
+        <% days.forEach(day => { %>
+            <div class="day-column">
+                <h2><%= day %></h2>
+                <% suggestions.filter(option => option.day === day).forEach(option => { %>
+                    <div class="menu-option">
+                        <h3><%= option.name %> (<%= option.dietary %>)</h3>
+                        <div class="macros">
+                            <p>Calories: <%= option.calories %></p>
+                            <p>Protein: <%= option.protein %></p>
+                            <p>Carbs: <%= option.carbs %></p>
+                            <p>Fat: <%= option.fat %></p>
+                        </div>
+                    </div>
                 <% }); %>
-            </ul>
-        <% } else if (suggestions) { %> 
-            <p>No suggestions found. Try adjusting your filters.</p>
-        <% } %>
+            </div>
+        <% }); %>
     </div>
+
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

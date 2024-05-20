@@ -20,6 +20,7 @@ Dependencies: {
     "sqlite3": "^5.1.7"
   }
 }
+this should be the sessionSecret in keys.js: 'f1b2c3d4e5f678901234567890abcdefabcdef0123456789abcdefabcdef0123456789abcdefabcdef0123456789abcdefabcdef0123456789abcdef'
 
 cd webpages
 

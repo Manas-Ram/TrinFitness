@@ -22,7 +22,7 @@ exports.requestSlot = (req, res) => {
                     return res.status(500).json({ success: false, message: 'Failed to update calendar' });
                 }
 
-                Activity.logActivity(user, 'request slot', (err) => {
+                Activity.logActivity(req.user.email, 'request slot', (err) => {
                     if (err) console.error('Failed to log activity:', err);
                 });
 
@@ -79,3 +79,4 @@ exports.denyRequest = (req, res) => {
         });
     });
 };
+

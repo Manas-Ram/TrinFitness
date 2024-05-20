@@ -1,5 +1,6 @@
 const SlotRequest = require('../models/SlotRequest');
 const WeeklyCalendar = require('../models/WeeklyCalendar');
+const Activity = require('../models/Activity');
 
 exports.requestSlot = (req, res) => {
     const { week, day, time, user } = req.body;
@@ -21,6 +22,10 @@ exports.requestSlot = (req, res) => {
                     return res.status(500).json({ success: false, message: 'Failed to update calendar' });
                 }
 
+                Activity.logActivity(user, 'request slot', (err) => {
+                    if (err) console.error('Failed to log activity:', err);
+                });
+
                 res.json({ success: true, message: 'Slot requested successfully' });
             });
         });
@@ -37,6 +42,10 @@ exports.acceptRequest = (req, res) => {
             if (err) {
                 return res.status(500).json({ success: false, message: 'Failed to update calendar' });
             }
+
+            Activity.logActivity(req.user.email, 'accept slot request', (err) => {
+                if (err) console.error('Failed to log activity:', err);
+            });
 
             res.json({ success: true, message: 'Slot request accepted successfully' });
         });
@@ -60,6 +69,10 @@ exports.denyRequest = (req, res) => {
                 console.error(`Failed to update calendar: ${err}`);  
                 return res.status(500).json({ success: false, message: 'Failed to update calendar' });
             }
+
+            Activity.logActivity(req.user.email, 'deny slot request', (err) => {
+                if (err) console.error('Failed to log activity:', err);
+            });
 
             console.log('Calendar updated to denied');  
             res.json({ success: true, message: 'Slot request denied successfully' });

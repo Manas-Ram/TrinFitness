@@ -1,5 +1,5 @@
 const MenuOption = require('../models/MenuOption');
-
+const Activity = require('../models/Activity')
 exports.getLunchplan = (req, res) => {
     MenuOption.getAll((err, menuOptions) => {
         if (err) return res.status(500).send(err);
@@ -63,22 +63,23 @@ exports.postLunchplan = (req, res) => {
         //     });
         //     return totals;
         // }, { calories: 0, protein: 0, carbs: 0, fat: 0 });
-
-        res.render('lunchplan', {
-            mealTypes: [
-                { value: 'no_restriction', display: 'No Restriction' },
-                { value: 'high_protein', display: 'High Protein' },
-                { value: 'high_fat', display: 'High Fat' }
-            ],
-            dietaryRestrictions: [
-                { id: 'none', name: 'none', value: 'none', label: 'No Restriction' },
-                { id: 'vegan', name: 'vegan', value: 'vegan', label: 'Vegan' },
-                { id: 'vegetarian', name: 'vegetarian', value: 'vegetarian', label: 'Vegetarian' }
-            ],
-            suggestions: filteredOptions,
-            menuOptions: menuOptions
-            // weeklyMacros: weeklyMacros
+        Activity.logActivity(req.user.email, 'Applied Filters on Lunch Plan', (err) => {
+            if (err) console.error('Failed to log activity:', err);
+            res.render('lunchplan', {
+                mealTypes: [
+                    { value: 'no_restriction', display: 'No Restriction' },
+                    { value: 'high_protein', display: 'High Protein' },
+                    { value: 'high_fat', display: 'High Fat' }
+                ],
+                dietaryRestrictions: [
+                    { id: 'none', name: 'none', value: 'none', label: 'No Restriction' },
+                    { id: 'vegan', name: 'vegan', value: 'vegan', label: 'Vegan' },
+                    { id: 'vegetarian', name: 'vegetarian', value: 'vegetarian', label: 'Vegetarian' }
+                ],
+                suggestions: filteredOptions,
+                menuOptions: menuOptions
+                // weeklyMacros: weeklyMacros
+            });
         });
     });
 };
-

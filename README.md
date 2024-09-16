@@ -21,8 +21,7 @@ Dependencies: {
   }
 }
 
-Replace what is currently in keys.js with the id and secret provided by Mr. Gohde
-
+Replace what is currently in keys.js with the id and secret with your personal
 this should be the sessionSecret in keys.js: 'f1b2c3d4e5f678901234567890abcdefabcdef0123456789abcdefabcdef0123456789abcdefabcdef0123456789abcdefabcdef0123456789abcdef'
 
 cd webpages
